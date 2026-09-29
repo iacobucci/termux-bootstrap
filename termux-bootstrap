@@ -61,9 +61,12 @@ PERSONAL_REPOS=(
     "$LOCAL_DIR/templates|https://github.com/iacobucci/templates|ssh://valerio@rock/git/templates.git"
 )
 
-# Special password-store repository
+# Special secure repositories (hosted on rock)
 PASSWORD_STORE_DIR="$HOME/.local/share/password-store"
 PASSWORD_STORE_ORIGIN="ssh://valerio@rock/git/password-store"
+
+GNUPG_DIR="$HOME/.config/gnupg"
+GNUPG_ORIGIN="ssh://valerio@rock/git/gnupg.git"
 
 # Other forks & utility repositories to clone: "TARGET_DIRECTORY|REPO_GIT_URL|BRANCH"
 OTHER_REPOS=(
@@ -648,7 +651,7 @@ Workflow stages:
     4. Directories   - Create ~/.local/dir/{config,content,forks,notes,script,source,templates},
                        generate ~/.local/dir/.update.sh, and link them into ~
     5. SSH Check     - Validate SSH private keys and permissions for git authentication
-    6. Clone Repos   - Clone personal repos (origin/rock/github remotes), password-store, and sync termux branch
+    6. Clone Repos   - Clone personal repos (origin/rock/github remotes), password-store, gnupg, and sync termux branch
     7. Compilation   - Compile programs (htop-vim, lf, rstow, pwdshort) into ~/.local/bin/
     8. Python Pkgs   - Install Python packages via pip (${PYTHON_PIP_PACKAGES[*]})
     9. Dotfiles      - Run update in ~/config (rstow), symlink ~/config/termux to ~/.termux, ~/.termux/zshenv to \$PREFIX/etc/zshenv, and move /etc/motd to /etc/motd.old
@@ -971,6 +974,13 @@ clone_or_update_repo() {
         return 0
     fi
 
+    # If target directory exists without a git repository, remove it if empty so git clone succeeds
+    if [[ -d "$target" && ! -d "$target/.git" ]]; then
+        if [[ -z "$(ls -A "$target" 2>/dev/null)" ]]; then
+            run_cmd rmdir "$target" 2>/dev/null || true
+        fi
+    fi
+
     log_info "Cloning '$name' from $url (branch: $branch)..."
     run_cmd mkdir -p "$(dirname "$target")"
 
@@ -1042,9 +1052,10 @@ configure_personal_repo_remotes() {
     git -C "$target" config remote.github.fetch "+refs/heads/*:refs/remotes/github/*"
 }
 
-configure_password_store_remotes() {
-    local target="$PASSWORD_STORE_DIR"
-    local origin_url="$PASSWORD_STORE_ORIGIN"
+configure_rock_repo_remotes() {
+    local target="$1"
+    local name="$2"
+    local origin_url="$3"
 
     if [[ "$DRY_RUN" == true ]]; then
         echo "[DRY-RUN] Configure remotes in $target (origin -> $origin_url)"
@@ -1053,7 +1064,7 @@ configure_password_store_remotes() {
 
     [[ -d "$target/.git" ]] || return 0
 
-    log_info "Configuring remotes for 'password-store' (origin: $origin_url)..."
+    log_info "Configuring remotes for '$name' (origin: $origin_url)..."
 
     if git -C "$target" remote get-url origin >/dev/null 2>&1; then
         git -C "$target" remote set-url origin "$origin_url"
@@ -1125,10 +1136,15 @@ step_clone_repos() {
         configure_personal_repo_remotes "$target" "$github_url" "$rock_url"
     done
 
-    # 2. Clone special password-store repository
+    # 2. Clone special repositories (password-store and gnupg from rock)
     run_cmd mkdir -p "$(dirname "$PASSWORD_STORE_DIR")" || true
     clone_or_update_repo "$PASSWORD_STORE_DIR" "$PASSWORD_STORE_ORIGIN" "termux"
-    configure_password_store_remotes
+    configure_rock_repo_remotes "$PASSWORD_STORE_DIR" "password-store" "$PASSWORD_STORE_ORIGIN"
+
+    run_cmd mkdir -p "$(dirname "$GNUPG_DIR")" || true
+    clone_or_update_repo "$GNUPG_DIR" "$GNUPG_ORIGIN" "termux"
+    configure_rock_repo_remotes "$GNUPG_DIR" "gnupg" "$GNUPG_ORIGIN"
+    run_cmd chmod 700 "$GNUPG_DIR" 2>/dev/null || true
 
     # 3. Clone other forks and utilities
     for entry in "${OTHER_REPOS[@]}"; do
@@ -1136,13 +1152,15 @@ step_clone_repos() {
         clone_or_update_repo "$target" "$url" "$branch"
     done
 
-    # 4. Fetch, checkout 'termux' branch, and pull on each personal dir repo and password-store
-    log_info "Synchronizing 'termux' branch on personal repositories and password-store..."
+    # 4. Fetch, checkout 'termux' branch, and pull on each personal dir repo, password-store, and gnupg
+    log_info "Synchronizing 'termux' branch on personal repositories, password-store, and gnupg..."
     for entry in "${PERSONAL_REPOS[@]}"; do
         IFS="|" read -r target _ _ <<< "$entry"
         sync_termux_branch "$target"
     done
     sync_termux_branch "$PASSWORD_STORE_DIR"
+    sync_termux_branch "$GNUPG_DIR"
+    run_cmd chmod 700 "$GNUPG_DIR" 2>/dev/null || true
 }
 
 # ==============================================================================
