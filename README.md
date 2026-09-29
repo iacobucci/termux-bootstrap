@@ -21,7 +21,7 @@ curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/hea
 5. **SSH**: Verifica la presenza e i permessi delle chiavi private in `~/.ssh/`.
 6. **Clone**: Clona repository personali e fork da GitHub/server privato.
 7. **Compilazione**: Compila i programmi personali (`htop-vim`, `lf`, `rstow`, `pwdshort`) in `~/.local/bin/`.
-8. **Dotfiles**: Esegue `update` da `~/script` in `~/config` (gestito da `rstow`) e crea il symlink `~/.termux` -> `~/config/termux` (impostando `zsh` come shell predefinita).
+8. **Dotfiles**: Esegue `update` da `~/script` in `~/config` (gestito da `rstow`), crea il symlink `~/.termux` -> `~/config/termux` (impostando `zsh` come shell predefinita) e collega `.termux/zshenv` a `/data/data/com.termux/files/usr/etc/zshenv` (per inizializzare `$ZDOTDIR`).
 9. **Antigravity CLI**: Configura `127.0.0.1 localhost` e `::1 ip6-localhost` in `/etc/hosts` e installa [antigravity-cli-termux](https://github.com/wallentx/antigravity-cli-termux).
 10. **Servizi**: Abilita il demone SSH (`sv-enable sshd`).
 

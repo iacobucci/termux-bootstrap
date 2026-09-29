@@ -627,7 +627,7 @@ Workflow stages:
     5. SSH Check     - Validate SSH private keys and permissions for git authentication
     6. Clone Repos   - Clone private repos and forks into ~/.local/dir/
     7. Compile       - Compile personal programs into ~/.local/bin (htop-vim, lf, rstow, pwdshort)
-    8. Dotfiles      - Run update in ~/config (rstow) and symlink ~/config/termux to ~/.termux
+    8. Dotfiles      - Run update in ~/config (rstow), symlink ~/config/termux to ~/.termux, and ~/.termux/zshenv to \$PREFIX/etc/zshenv
     9. Antigravity   - Configure /etc/hosts localhost and install Antigravity CLI (wallentx)
    10. Services      - Enable background daemons (sshd)
 
@@ -769,14 +769,32 @@ step_change_repo() {
     fi
 
     log_step "Configuring package mirror with termux-change-repo..."
+    local prefix_dir="${PREFIX:-/data/data/com.termux/files/usr}"
+    local eu_mirrors="$prefix_dir/etc/termux/mirrors/europe"
+    local chosen_mirrors="$prefix_dir/etc/termux/chosen_mirrors"
+
     if command -v termux-change-repo >/dev/null 2>&1; then
         if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] termux-change-repo"
+            echo "[DRY-RUN] termux-change-repo < /dev/tty > /dev/tty"
+        elif [[ -r /dev/tty && -w /dev/tty ]]; then
+            # Direct stdin/stdout to controlling terminal so interactive dialog works even in pipes (curl | bash)
+            log_info "Launching termux-change-repo (select 'Mirrors in Europe' for optimal speeds)..."
+            termux-change-repo < /dev/tty > /dev/tty || log_warn "termux-change-repo was cancelled or encountered an issue."
         elif [[ -t 0 ]]; then
             log_info "Launching termux-change-repo (select 'Mirrors in Europe' for optimal speeds)..."
             termux-change-repo || log_warn "termux-change-repo was cancelled or encountered an issue."
+        elif [[ -d "$eu_mirrors" ]]; then
+            log_info "Controlling terminal not available. Automatically setting European mirrors ($eu_mirrors)..."
+            ln -snf "$eu_mirrors" "$chosen_mirrors" 2>/dev/null || true
         else
-            log_warn "Non-interactive shell detected; skipping termux-change-repo."
+            log_warn "Controlling terminal not available; skipping termux-change-repo."
+        fi
+    elif [[ -d "$eu_mirrors" ]]; then
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY-RUN] ln -snf $eu_mirrors $chosen_mirrors"
+        else
+            log_info "'termux-change-repo' not found. Setting European mirrors ($eu_mirrors)..."
+            ln -snf "$eu_mirrors" "$chosen_mirrors" 2>/dev/null || true
         fi
     else
         log_warn "'termux-change-repo' command not found, skipping mirror selection."
@@ -1117,6 +1135,19 @@ step_dotfiles() {
         fi
     else
         log_warn "Termux configuration directory '$termux_src' not found, skipping ~/.termux link."
+    fi
+
+    # 3. Symlink .termux/zshenv to /data/data/com.termux/files/usr/etc/zshenv (sets ZDOTDIR for zsh)
+    local zshenv_src="$HOME/.termux/zshenv"
+    local zshenv_dest="${PREFIX:-/data/data/com.termux/files/usr}/etc/zshenv"
+
+    log_info "Linking $zshenv_src -> $zshenv_dest (initializes ZDOTDIR for zsh)..."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY-RUN] ln -snf $zshenv_src $zshenv_dest"
+    else
+        mkdir -p "$(dirname "$zshenv_dest")" 2>/dev/null || true
+        ln -snf "$zshenv_src" "$zshenv_dest" || log_warn "Failed to create symlink $zshenv_dest -> $zshenv_src"
+        log_info "Symlink created: $zshenv_dest -> $zshenv_src"
     fi
 }
 
