@@ -650,7 +650,7 @@ Workflow stages:
     5. SSH Check     - Validate SSH private keys and permissions for git authentication
     6. Clone Repos   - Clone personal repos (origin/rock/github remotes), password-store, and sync termux branch
     7. Compile & Py  - Compile programs (htop-vim, lf, rstow, pwdshort) and install Python packages via pip
-    8. Dotfiles      - Run update in ~/config (rstow), symlink ~/config/termux to ~/.termux, and ~/.termux/zshenv to \$PREFIX/etc/zshenv
+    8. Dotfiles      - Run update in ~/config (rstow), symlink ~/config/termux to ~/.termux, ~/.termux/zshenv to \$PREFIX/etc/zshenv, and move /etc/motd to /etc/motd.old
     9. Antigravity   - Configure /etc/hosts localhost and install Antigravity CLI (wallentx)
    10. Services      - Enable background daemons (sshd)
 
@@ -1179,10 +1179,11 @@ compile_rstow() {
 
     log_info "Compiling rstow -> $out"
     if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] (cd $dir && cargo build --release && cp target/release/rstow $out)"
+        echo "[DRY-RUN] (cd $dir && CARGO_HOME=\"\${CARGO_HOME:-\$HOME/.local/share/cargo}\" cargo build --release && cp target/release/rstow $out)"
     else
         (
             cd "$dir"
+            export CARGO_HOME="${CARGO_HOME:-$HOME/.local/share/cargo}"
             cargo build --release
             cp target/release/rstow "$out"
         ) || log_warn "Failed to compile rstow."
@@ -1203,11 +1204,11 @@ compile_lf() {
 
     log_info "Compiling lf -> $out"
     if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] (cd $dir && env CGO_ENABLED=0 go build -ldflags="-s -w" -o $out)"
+        echo "[DRY-RUN] (cd $dir && env CGO_ENABLED=0 GOPATH=\"\${GOPATH:-\$HOME/.local/share/go}\" go build -ldflags=\"-s -w\" -o $out)"
     else
         (
             cd "$dir"
-            env CGO_ENABLED=0 go build -ldflags="-s -w" -o "$out"
+            env CGO_ENABLED=0 GOPATH="${GOPATH:-$HOME/.local/share/go}" go build -ldflags="-s -w" -o "$out"
         ) || log_warn "Failed to compile lf."
     fi
 }
@@ -1353,6 +1354,18 @@ step_dotfiles() {
         mkdir -p "$(dirname "$zshenv_dest")" 2>/dev/null || true
         ln -snf "$zshenv_src" "$zshenv_dest" || log_warn "Failed to create symlink $zshenv_dest -> $zshenv_src"
         log_info "Symlink created: $zshenv_dest -> $zshenv_src"
+    fi
+
+    # 4. Disable login MOTD banner by renaming /etc/motd to /etc/motd.old
+    local motd_file="${PREFIX:-/data/data/com.termux/files/usr}/etc/motd"
+    if [[ ! -e "$motd_file" && -e "/etc/motd" ]]; then
+        motd_file="/etc/motd"
+    fi
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY-RUN] [ -e $motd_file ] && mv -f $motd_file ${motd_file}.old"
+    elif [[ -e "$motd_file" || -L "$motd_file" ]]; then
+        log_info "Moving $motd_file -> ${motd_file}.old..."
+        mv -f "$motd_file" "${motd_file}.old" 2>/dev/null || log_warn "Could not move $motd_file to ${motd_file}.old."
     fi
 }
 

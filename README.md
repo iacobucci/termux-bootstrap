@@ -21,7 +21,7 @@ curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/hea
 5. **SSH**: Verify presence and file permissions of private keys in `~/.ssh/`.
 6. **Clone & Remotes**: Clone personal repositories (`config`, `content`, `notes`, `script`, `templates`) configuring multi-remotes (`origin`, `rock`, `github`), clone `password-store` into `~/.local/share/password-store` (`ssh://valerio@rock/git/password-store`), clone external forks/utilities, and synchronize all personal repos and password-store to branch `termux` with pull.
 7. **Compilation & Python Packages**: Compile personal programs (`htop-vim`, `lf`, `rstow`, `pwdshort`) into `~/.local/bin/` and install Python packages (`ptpython`, `mutagen`, `eyed3`, `requests`, `totp`) via `pip install --break-system-packages`.
-8. **Dotfiles**: Run `update` from `~/script` in `~/config` (managed by `rstow`), symlink `~/.termux` -> `~/config/termux` (setting `zsh` as default login shell), and link `.termux/zshenv` to `/data/data/com.termux/files/usr/etc/zshenv` (to initialize `$ZDOTDIR`).
+8. **Dotfiles**: Run `update` from `~/script` in `~/config` (managed by `rstow`), symlink `~/.termux` -> `~/config/termux` (setting `zsh` as default login shell), link `.termux/zshenv` to `/data/data/com.termux/files/usr/etc/zshenv` (to initialize `$ZDOTDIR`), and move `/etc/motd` to `/etc/motd.old` to silence the login banner.
 9. **Antigravity CLI**: Configure `127.0.0.1 localhost` and `::1 ip6-localhost` in `/etc/hosts` and install [antigravity-cli-termux](https://github.com/wallentx/antigravity-cli-termux).
 10. **Services**: Enable background SSH daemon (`sv-enable sshd`).
 
