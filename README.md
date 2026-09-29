@@ -2,6 +2,21 @@
 
 Script di bootstrap modulare e robusto per ambienti **Termux** su Android.
 
+## Installazione rapida (one-liner via curl)
+
+Su un nuovo ambiente Termux è possibile avviare il bootstrap direttamente da remoto con:
+
+```bash
+# Esecuzione completa diretta
+curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/heads/master/termux-bootstrap | bash
+
+# Simulazione (dry-run) passando argomenti a bash (-s -- <opzioni>)
+curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/heads/master/termux-bootstrap | bash -s -- --dry-run
+
+# Esempio saltando l'installazione dei pacchetti
+curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/heads/master/termux-bootstrap | bash -s -- --no-install-packages
+```
+
 ## Workflow
 
 1. **Storage**: Richiede i permessi di archiviazione (`termux-setup-storage`).
@@ -15,7 +30,7 @@ Script di bootstrap modulare e robusto per ambienti **Termux** su Android.
 9. **Antigravity CLI**: Configura `127.0.0.1 localhost` e `::1 ip6-localhost` in `/etc/hosts` e installa [antigravity-cli-termux](https://github.com/wallentx/antigravity-cli-termux).
 10. **Servizi**: Abilita il demone SSH (`sv-enable sshd`).
 
-## Utilizzo
+## Utilizzo locale
 
 ```bash
 # Esecuzione completa (primo avvio)
