@@ -649,10 +649,11 @@ Workflow stages:
                        generate ~/.local/dir/.update.sh, and link them into ~
     5. SSH Check     - Validate SSH private keys and permissions for git authentication
     6. Clone Repos   - Clone personal repos (origin/rock/github remotes), password-store, and sync termux branch
-    7. Compile & Py  - Compile programs (htop-vim, lf, rstow, pwdshort) and install Python packages via pip
-    8. Dotfiles      - Run update in ~/config (rstow), symlink ~/config/termux to ~/.termux, ~/.termux/zshenv to \$PREFIX/etc/zshenv, and move /etc/motd to /etc/motd.old
-    9. Antigravity   - Configure /etc/hosts localhost and install Antigravity CLI (wallentx)
-   10. Services      - Enable background daemons (sshd)
+    7. Compilation   - Compile programs (htop-vim, lf, rstow, pwdshort) into ~/.local/bin/
+    8. Python Pkgs   - Install Python packages via pip (${PYTHON_PIP_PACKAGES[*]})
+    9. Dotfiles      - Run update in ~/config (rstow), symlink ~/config/termux to ~/.termux, ~/.termux/zshenv to \$PREFIX/etc/zshenv, and move /etc/motd to /etc/motd.old
+   10. Antigravity   - Configure /etc/hosts localhost and install Antigravity CLI (wallentx)
+   11. Services      - Enable background daemons (sshd)
 
 Examples:
     $(basename "$0")                          # Full bootstrap
@@ -1241,13 +1242,31 @@ compile_htop_vim() {
     fi
 }
 
-install_python_packages() {
-    if [[ "$INSTALL_PYTHON" != true ]]; then
-        log_info "Skipping Python package installation (--no-python specified)."
+step_compile_programs() {
+    if [[ "$COMPILE_PROGRAMS" != true ]]; then
+        log_step "Skipping program compilation (--no-compile specified)."
         return 0
     fi
 
-    log_info "Installing Python packages via pip (${PYTHON_PIP_PACKAGES[*]})..."
+    log_step "Compiling personal programs..."
+    run_cmd mkdir -p "$HOME/.local/bin" || true
+
+    compile_pwdshort
+    compile_rstow
+    compile_lf
+    compile_htop_vim
+}
+
+# ==============================================================================
+# STEP 8: PYTHON PACKAGES
+# ==============================================================================
+step_python_packages() {
+    if [[ "$INSTALL_PYTHON" != true ]]; then
+        log_step "Skipping Python package installation (--no-python specified)."
+        return 0
+    fi
+
+    log_step "Installing Python packages via pip (${PYTHON_PIP_PACKAGES[*]})..."
     local pip_cmd
     if command -v pip3 >/dev/null 2>&1; then
         pip_cmd="pip3"
@@ -1270,24 +1289,8 @@ install_python_packages() {
         || log_warn "pip install encountered issues on some Python packages."
 }
 
-step_compile_programs() {
-    if [[ "$COMPILE_PROGRAMS" != true ]]; then
-        log_step "Skipping program compilation (--no-compile specified)."
-        return 0
-    fi
-
-    log_step "Compiling personal programs and installing Python packages..."
-    run_cmd mkdir -p "$HOME/.local/bin" || true
-
-    compile_pwdshort
-    compile_rstow
-    compile_lf
-    compile_htop_vim
-    install_python_packages
-}
-
 # ==============================================================================
-# STEP 8: DOTFILES & TERMUX CONFIGURATION
+# STEP 9: DOTFILES & TERMUX CONFIGURATION
 # ==============================================================================
 step_dotfiles() {
     if [[ "$SETUP_DOTFILES" != true ]]; then
@@ -1370,7 +1373,7 @@ step_dotfiles() {
 }
 
 # ==============================================================================
-# STEP 9: ANTIGRAVITY CLI & HOSTS CONFIGURATION
+# STEP 10: ANTIGRAVITY CLI & HOSTS CONFIGURATION
 # ==============================================================================
 configure_hosts() {
     log_info "Configuring localhost mappings in /etc/hosts for Antigravity authentication..."
@@ -1467,7 +1470,7 @@ step_antigravity() {
 }
 
 # ==============================================================================
-# STEP 10: BACKGROUND SERVICES
+# STEP 11: BACKGROUND SERVICES
 # ==============================================================================
 step_services() {
     if [[ "$ENABLE_SERVICES" != true ]]; then
@@ -1496,6 +1499,7 @@ main() {
     step_ssh_check
     step_clone_repos
     step_compile_programs
+    step_python_packages
     step_dotfiles
     step_antigravity
     step_services
