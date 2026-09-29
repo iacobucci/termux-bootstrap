@@ -25,7 +25,7 @@ ASSUME_YES=false
 
 LOCAL_DIR="$HOME/.local/dir"
 
-# Python packages installed via pip into persistent environment
+# Python packages installed via pip
 PYTHON_PIP_PACKAGES=(
     ptpython
     mutagen
@@ -649,7 +649,7 @@ Workflow stages:
                        generate ~/.local/dir/.update.sh, and link them into ~
     5. SSH Check     - Validate SSH private keys and permissions for git authentication
     6. Clone Repos   - Clone personal repos (origin/rock/github remotes), password-store, and sync termux branch
-    7. Compile & Py  - Compile programs (htop-vim, lf, rstow, pwdshort) and install resilient Python packages
+    7. Compile & Py  - Compile programs (htop-vim, lf, rstow, pwdshort) and install Python packages via pip
     8. Dotfiles      - Run update in ~/config (rstow), symlink ~/config/termux to ~/.termux, and ~/.termux/zshenv to \$PREFIX/etc/zshenv
     9. Antigravity   - Configure /etc/hosts localhost and install Antigravity CLI (wallentx)
    10. Services      - Enable background daemons (sshd)
@@ -1246,117 +1246,27 @@ install_python_packages() {
         return 0
     fi
 
-    log_info "Setting up resilient Python packages (${PYTHON_PIP_PACKAGES[*]})..."
-    local site_dir="$HOME/.local/lib/python/site-packages"
-    local bin_dir="$HOME/.local/bin"
-
-    run_cmd mkdir -p "$site_dir" || true
-    run_cmd mkdir -p "$bin_dir" || true
-
-    # 1. Install or update persistent bash entry-point wrappers in ~/.local/bin
-    # These wrappers use dynamic 'exec python3 ...' instead of hardcoding python3.X shebangs,
-    # and explicitly export ~/.local/lib/python/site-packages into PYTHONPATH.
-    local wrappers=(
-        "ptpython:exec python3 -m ptpython \"\$@\""
-        "totp:exec python3 -c \"import sys; from totp.cli import run; sys.exit(run())\" \"\$@\""
-        "eyeD3:exec python3 -c \"import sys; from eyed3.main import _main; sys.exit(_main())\" \"\$@\""
-        "mid3v2:exec python3 -c \"import sys; from mutagen._tools.mid3v2 import main; sys.exit(main())\" \"\$@\""
-    )
-
-    for w in "${wrappers[@]}"; do
-        local cmd_name="${w%%:*}"
-        local cmd_exec="${w#*:}"
-        local wrapper_file="$bin_dir/$cmd_name"
-        if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] Create persistent wrapper $wrapper_file"
-        else
-            cat > "$wrapper_file" <<EOF_WRAPPER
-#!/usr/bin/env bash
-export PYTHONPATH="\$HOME/.local/lib/python/site-packages\${PYTHONPATH:+:\$PYTHONPATH}"
-$cmd_exec
-EOF_WRAPPER
-            chmod +x "$wrapper_file" 2>/dev/null || true
-        fi
-    done
-
-    # 2. Write self-healing ~/.local/bin/py-sync script
-    local pysync_file="$bin_dir/py-sync"
-    log_info "Writing self-healing Python sync tool: $pysync_file..."
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] Create and chmod +x $pysync_file"
-    else
-        cat > "$pysync_file" <<'EOF_PYSYNC'
-#!/usr/bin/env bash
-# Synchronizes and repairs Python packages for Termux across system Python upgrades.
-set -uo pipefail
-
-PACKAGES=(
-    ptpython
-    mutagen
-    eyed3
-    requests
-    totp
-)
-
-SITE_DIR="$HOME/.local/lib/python/site-packages"
-mkdir -p "$SITE_DIR" "$HOME/.local/bin"
-
-force=false
-if [[ "${1:-}" == "--force" || "${1:-}" == "-f" ]]; then
-    force=true
-fi
-
-# Check if current python can import all required packages
-if [[ "$force" == false ]] && python3 -c "import ptpython, mutagen, eyed3, requests, totp" >/dev/null 2>&1; then
-    echo "All Python packages (ptpython, mutagen, eyed3, requests, totp) are functional."
-    exit 0
-fi
-
-echo "Installing/synchronizing Python packages for $(python3 -V 2>&1)..."
-pip_cmd="$(command -v pip3 || command -v pip || echo "python3 -m pip")"
-
-# Install both into active system/user environment and version-agnostic site directory
-$pip_cmd install --break-system-packages --upgrade "${PACKAGES[@]}" 2>/dev/null \
-    || $pip_cmd install --upgrade "${PACKAGES[@]}" 2>/dev/null \
-    || echo "[!] Warning: some packages may have encountered issues during pip install."
-
-$pip_cmd install --break-system-packages --target "$SITE_DIR" --upgrade "${PACKAGES[@]}" 2>/dev/null \
-    || $pip_cmd install --target "$SITE_DIR" --upgrade "${PACKAGES[@]}" 2>/dev/null || true
-
-echo "Python packages synchronized successfully."
-EOF_PYSYNC
-        chmod +x "$pysync_file" 2>/dev/null || true
-    fi
-
-    # 3. Check and install packages using pip
-    if ! command -v python3 >/dev/null 2>&1 && ! command -v pip >/dev/null 2>&1 && ! command -v pip3 >/dev/null 2>&1; then
-        log_warn "Python3 / pip not available, skipping pip package installation."
-        return 0
-    fi
-
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] pip install --break-system-packages --upgrade ${PYTHON_PIP_PACKAGES[*]}"
-        echo "[DRY-RUN] pip install --break-system-packages --target $site_dir --upgrade ${PYTHON_PIP_PACKAGES[*]}"
-        return 0
-    fi
-
-    log_info "Installing Python packages with pip (system & persistent site-packages)..."
-    local pip_runner
+    log_info "Installing Python packages via pip (${PYTHON_PIP_PACKAGES[*]})..."
+    local pip_cmd
     if command -v pip3 >/dev/null 2>&1; then
-        pip_runner="pip3"
+        pip_cmd="pip3"
     elif command -v pip >/dev/null 2>&1; then
-        pip_runner="pip"
+        pip_cmd="pip"
+    elif command -v python3 >/dev/null 2>&1; then
+        pip_cmd="python3 -m pip"
     else
-        pip_runner="python3 -m pip"
+        log_warn "Neither pip nor python3 found; skipping Python package installation."
+        return 0
     fi
 
-    $pip_runner install --break-system-packages --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null \
-        || $pip_runner install --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null \
-        || log_warn "Failed to install some Python packages into system environment."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY-RUN] $pip_cmd install --break-system-packages --upgrade ${PYTHON_PIP_PACKAGES[*]}"
+        return 0
+    fi
 
-    $pip_runner install --break-system-packages --target "$site_dir" --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null \
-        || $pip_runner install --target "$site_dir" --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null \
-        || log_warn "Failed to install some Python packages into persistent site-packages ($site_dir)."
+    $pip_cmd install --break-system-packages --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null \
+        || $pip_cmd install --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null \
+        || log_warn "pip install encountered issues on some Python packages."
 }
 
 step_compile_programs() {
@@ -1365,7 +1275,7 @@ step_compile_programs() {
         return 0
     fi
 
-    log_step "Compiling personal programs and installing Python tools..."
+    log_step "Compiling personal programs and installing Python packages..."
     run_cmd mkdir -p "$HOME/.local/bin" || true
 
     compile_pwdshort
@@ -1435,19 +1345,6 @@ step_dotfiles() {
     # 3. Symlink .termux/zshenv to /data/data/com.termux/files/usr/etc/zshenv (sets ZDOTDIR for zsh)
     local zshenv_src="$HOME/.termux/zshenv"
     local zshenv_dest="${PREFIX:-/data/data/com.termux/files/usr}/etc/zshenv"
-
-    # Ensure persistent PYTHONPATH is included in zshenv so all python scripts find shared packages
-    local pypath_line="export PYTHONPATH=\"\$HOME/.local/lib/python/site-packages\${PYTHONPATH:+:\$PYTHONPATH}\""
-    if [[ -f "$zshenv_src" ]]; then
-        if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] Ensure persistent PYTHONPATH in $zshenv_src"
-        else
-            if ! grep -qF ".local/lib/python/site-packages" "$zshenv_src" 2>/dev/null; then
-                echo "$pypath_line" >> "$zshenv_src"
-                log_info "Added persistent PYTHONPATH to $zshenv_src"
-            fi
-        fi
-    fi
 
     log_info "Linking $zshenv_src -> $zshenv_dest (initializes ZDOTDIR for zsh)..."
     if [[ "$DRY_RUN" == true ]]; then
