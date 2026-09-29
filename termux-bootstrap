@@ -1,6 +1,10 @@
 #!/usr/bin/env bash
 
-set -euo pipefail
+# Enable nounset and pipefail to catch unset variables and pipeline errors.
+# We intentionally do NOT use 'set -e' (errexit) because bootstrap and provisioning
+# scripts must be resilient: commands like termux-setup-storage, pkg updates, or sv-enable
+# frequently return non-zero exit codes for benign or non-fatal reasons.
+set -uo pipefail
 
 # ==============================================================================
 # CONFIGURATION & DEFAULTS
@@ -744,8 +748,13 @@ step_storage() {
     fi
 
     log_step "Configuring Android storage access..."
+    if [[ -d "$HOME/storage" ]]; then
+        log_info "Storage directory already exists ($HOME/storage). Skipping termux-setup-storage."
+        return 0
+    fi
+
     if command -v termux-setup-storage >/dev/null 2>&1; then
-        run_cmd termux-setup-storage
+        run_cmd termux-setup-storage || log_warn "'termux-setup-storage' returned non-zero (access may already be granted or permission dialog was dismissed). Continuing."
     else
         log_warn "'termux-setup-storage' command not found, skipping."
     fi
@@ -795,13 +804,13 @@ step_packages() {
     fi
 
     log_info "Updating package lists..."
-    run_cmd pkg update "${pkg_flags[@]}"
+    run_cmd pkg update "${pkg_flags[@]}" || log_warn "'pkg update' returned non-zero. Continuing with repository setup..."
 
     log_info "Enabling repositories (${REPOSITORIES[*]})..."
-    run_cmd pkg in "${pkg_flags[@]}" "${REPOSITORIES[@]}"
+    run_cmd pkg in "${pkg_flags[@]}" "${REPOSITORIES[@]}" || log_warn "Enabling additional repositories returned non-zero. Continuing..."
 
     log_info "Installing packages (${#PACKAGES[@]} packages)..."
-    run_cmd pkg install "${pkg_flags[@]}" "${PACKAGES[@]}"
+    run_cmd pkg install "${pkg_flags[@]}" "${PACKAGES[@]}" || log_warn "Some packages failed to install. Continuing with bootstrap..."
 }
 
 # ==============================================================================
@@ -816,11 +825,11 @@ step_directories() {
     log_step "Setting up ~/.local/dir structure and home symlinks..."
 
     # Ensure ~/.local/bin and ~/.local/dir exist
-    run_cmd mkdir -p "$HOME/.local/bin"
-    run_cmd mkdir -p "$LOCAL_DIR"
+    run_cmd mkdir -p "$HOME/.local/bin" || true
+    run_cmd mkdir -p "$LOCAL_DIR" || true
 
     for d in "${BASE_DIRS[@]}"; do
-        run_cmd mkdir -p "$LOCAL_DIR/$d"
+        run_cmd mkdir -p "$LOCAL_DIR/$d" || true
     done
 
     # Write ~/.local/dir/.update.sh
@@ -841,7 +850,7 @@ for f in $(ls $HOME/.local/dir); do
   $COMMAND
 done
 EOF_UPDATE
-        chmod +x "$update_script"
+        chmod +x "$update_script" 2>/dev/null || true
     fi
 
     # Execute symlink creation
@@ -851,7 +860,7 @@ EOF_UPDATE
             echo "[DRY-RUN] ln -sn $LOCAL_DIR/$d $HOME/$d"
         done
     else
-        bash "$update_script"
+        bash "$update_script" || log_warn "Some symlinks could not be created by $update_script."
     fi
 }
 
@@ -873,7 +882,7 @@ step_ssh_check() {
         return 0
     fi
 
-    run_cmd chmod 700 "$ssh_dir"
+    run_cmd chmod 700 "$ssh_dir" 2>/dev/null || true
 
     local key_count=0
     for key in "$ssh_dir"/id_*; do
@@ -1101,9 +1110,9 @@ step_dotfiles() {
             echo "[DRY-RUN] ln -snf $termux_src $termux_dest"
         else
             if [[ -d "$termux_dest" && ! -L "$termux_dest" ]]; then
-                rmdir "$termux_dest" 2>/dev/null || mv "$termux_dest" "$termux_dest.bak.$$"
+                rmdir "$termux_dest" 2>/dev/null || mv "$termux_dest" "$termux_dest.bak.$$" 2>/dev/null || true
             fi
-            ln -snf "$termux_src" "$termux_dest"
+            ln -snf "$termux_src" "$termux_dest" || log_warn "Failed to create symlink $termux_dest -> $termux_src"
             log_info "Symlink created: $termux_dest -> $termux_src"
         fi
     else
@@ -1219,7 +1228,7 @@ step_services() {
 
     log_step "Configuring background services..."
     if command -v sv-enable >/dev/null 2>&1; then
-        run_cmd sv-enable sshd
+        run_cmd sv-enable sshd || log_warn "'sv-enable sshd' returned non-zero (termux-services daemon may not be active yet; restart Termux and run 'sv-enable sshd')."
     else
         log_warn "'sv-enable' command not found (install 'termux-services' to enable sshd daemon)."
     fi
