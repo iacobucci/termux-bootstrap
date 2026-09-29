@@ -12,6 +12,7 @@ SETUP_DIRS=true
 CHECK_SSH=true
 CLONE_REPOS=true
 COMPILE_PROGRAMS=true
+SETUP_DOTFILES=true
 INSTALL_ANTIGRAVITY=true
 ENABLE_SERVICES=true
 DRY_RUN=false
@@ -604,6 +605,8 @@ Options:
     --clone                  Clone repositories and forks (default)
     --no-compile             Skip compiling programs (htop-vim, lf, rstow, pwdshort)
     --compile                Compile programs (default)
+    --no-dotfiles            Skip linking dotfiles with rstow and ~/.termux symlink
+    --dotfiles               Link dotfiles and configure ~/.termux (default)
     --no-antigravity         Skip installing Antigravity CLI
     --antigravity            Install Antigravity CLI (default)
     --no-services            Skip enabling background services (sshd)
@@ -620,8 +623,9 @@ Workflow stages:
     5. SSH Check     - Validate SSH private keys and permissions for git authentication
     6. Clone Repos   - Clone private repos and forks into ~/.local/dir/
     7. Compile       - Compile personal programs into ~/.local/bin (htop-vim, lf, rstow, pwdshort)
-    8. Antigravity   - Configure /etc/hosts localhost and install Antigravity CLI (wallentx)
-    9. Services      - Enable background daemons (sshd)
+    8. Dotfiles      - Run update in ~/config (rstow) and symlink ~/config/termux to ~/.termux
+    9. Antigravity   - Configure /etc/hosts localhost and install Antigravity CLI (wallentx)
+   10. Services      - Enable background daemons (sshd)
 
 Examples:
     $(basename "$0")                          # Full bootstrap
@@ -678,6 +682,14 @@ parse_args() {
                 ;;
             --compile)
                 COMPILE_PROGRAMS=true
+                shift
+                ;;
+            --no-dotfiles)
+                SETUP_DOTFILES=false
+                shift
+                ;;
+            --dotfiles)
+                SETUP_DOTFILES=true
                 shift
                 ;;
             --no-antigravity)
@@ -1042,7 +1054,65 @@ step_compile_programs() {
 }
 
 # ==============================================================================
-# STEP 8: ANTIGRAVITY CLI & HOSTS CONFIGURATION
+# STEP 8: DOTFILES & TERMUX CONFIGURATION
+# ==============================================================================
+step_dotfiles() {
+    if [[ "$SETUP_DOTFILES" != true ]]; then
+        log_step "Skipping dotfiles and Termux configuration (--no-dotfiles specified)."
+        return 0
+    fi
+
+    log_step "Configuring dotfiles via rstow and Termux environment..."
+
+    local config_dir="$HOME/config"
+    local script_update="$HOME/script/update"
+
+    # 1. Run "update" from ~/script in ~/config (populates ~/.config via rstow)
+    if [[ -d "$config_dir" ]]; then
+        log_info "Running 'update' in $config_dir (populates ~/.config via rstow)..."
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY-RUN] (cd $config_dir && export PATH=\"\$HOME/.local/bin:\$HOME/script:\$PATH\" && [ -x $script_update ] && $script_update || bash ./.update.sh)"
+        else
+            (
+                export PATH="$HOME/.local/bin:$HOME/script:$PATH"
+                cd "$config_dir"
+                if [[ -x "$script_update" ]]; then
+                    "$script_update"
+                elif [[ -x "./.update.sh" ]]; then
+                    ./.update.sh
+                elif [[ -f "./.update.sh" ]]; then
+                    bash ./.update.sh
+                else
+                    log_warn "Neither $script_update nor $config_dir/.update.sh found or executable."
+                fi
+            ) || log_warn "Dotfiles linking in $config_dir encountered an issue."
+        fi
+    else
+        log_warn "Config directory '$config_dir' does not exist, skipping dotfiles update."
+    fi
+
+    # 2. Symlink ~/config/termux to ~/.termux (switches default shell to zsh at next login)
+    local termux_src="$config_dir/termux"
+    local termux_dest="$HOME/.termux"
+
+    if [[ -d "$termux_src" ]]; then
+        log_info "Linking $termux_src -> $termux_dest (switches default login shell to zsh)..."
+        if [[ "$DRY_RUN" == true ]]; then
+            echo "[DRY-RUN] ln -snf $termux_src $termux_dest"
+        else
+            if [[ -d "$termux_dest" && ! -L "$termux_dest" ]]; then
+                rmdir "$termux_dest" 2>/dev/null || mv "$termux_dest" "$termux_dest.bak.$$"
+            fi
+            ln -snf "$termux_src" "$termux_dest"
+            log_info "Symlink created: $termux_dest -> $termux_src"
+        fi
+    else
+        log_warn "Termux configuration directory '$termux_src' not found, skipping ~/.termux link."
+    fi
+}
+
+# ==============================================================================
+# STEP 9: ANTIGRAVITY CLI & HOSTS CONFIGURATION
 # ==============================================================================
 configure_hosts() {
     log_info "Configuring localhost mappings in /etc/hosts for Antigravity authentication..."
@@ -1139,7 +1209,7 @@ step_antigravity() {
 }
 
 # ==============================================================================
-# STEP 9: BACKGROUND SERVICES
+# STEP 10: BACKGROUND SERVICES
 # ==============================================================================
 step_services() {
     if [[ "$ENABLE_SERVICES" != true ]]; then
@@ -1168,6 +1238,7 @@ main() {
     step_ssh_check
     step_clone_repos
     step_compile_programs
+    step_dotfiles
     step_antigravity
     step_services
 

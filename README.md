@@ -11,8 +11,9 @@ Script di bootstrap modulare e robusto per ambienti **Termux** su Android.
 5. **SSH**: Verifica la presenza e i permessi delle chiavi private in `~/.ssh/`.
 6. **Clone**: Clona repository personali e fork da GitHub/server privato.
 7. **Compilazione**: Compila i programmi personali (`htop-vim`, `lf`, `rstow`, `pwdshort`) in `~/.local/bin/`.
-8. **Antigravity CLI**: Configura `127.0.0.1 localhost` e `::1 ip6-localhost` in `/etc/hosts` e installa [antigravity-cli-termux](https://github.com/wallentx/antigravity-cli-termux).
-9. **Servizi**: Abilita il demone SSH (`sv-enable sshd`).
+8. **Dotfiles**: Esegue `update` da `~/script` in `~/config` (gestito da `rstow`) e crea il symlink `~/.termux` -> `~/config/termux` (impostando `zsh` come shell predefinita).
+9. **Antigravity CLI**: Configura `127.0.0.1 localhost` e `::1 ip6-localhost` in `/etc/hosts` e installa [antigravity-cli-termux](https://github.com/wallentx/antigravity-cli-termux).
+10. **Servizi**: Abilita il demone SSH (`sv-enable sshd`).
 
 ## Utilizzo
 
@@ -41,6 +42,7 @@ Script di bootstrap modulare e robusto per ambienti **Termux** su Android.
 | `--no-ssh-check` | Salta la verifica delle credenziali SSH |
 | `--no-clone` | Salta il cloning dei repository e dei fork |
 | `--no-compile` | Salta la compilazione dei binari in `~/.local/bin/` |
+| `--no-dotfiles` | Salta la configurazione dei dotfiles con `rstow` e il link di `~/.termux` |
 | `--no-antigravity` | Salta l'installazione di Antigravity CLI e la modifica di `/etc/hosts` |
 | `--no-services` | Salta l'attivazione del servizio `sshd` |
 | `-y, --yes` | Risponde sì automaticamente ai prompt di installazione |
