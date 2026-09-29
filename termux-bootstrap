@@ -27,6 +27,7 @@ LOCAL_DIR="$HOME/.local/dir"
 # Base directories maintained under ~/.local/dir
 BASE_DIRS=(
     config
+    content
     forks
     notes
     script
@@ -40,16 +41,26 @@ REPOSITORIES=(
     x11-repo
 )
 
-# Repositories to clone: "TARGET_DIRECTORY|REPO_GIT_URL|BRANCH"
-REPOSITORIES_TO_CLONE=(
-    "$LOCAL_DIR/config|git@github.com:iacobucci/config.git|termux"
-    "$LOCAL_DIR/script|git@github.com:iacobucci/script.git|termux"
-    "$LOCAL_DIR/notes|git@github.com:iacobucci/notes.git|termux"
-    "$LOCAL_DIR/templates|https://github.com/iacobucci/templates.git|master"
+# Personal repositories in ~/.local/dir requiring multi-remote configuration (origin, rock, github)
+# Format: "TARGET_DIRECTORY|GITHUB_URL|ROCK_URL"
+PERSONAL_REPOS=(
+    "$LOCAL_DIR/config|https://github.com/iacobucci/config|ssh://valerio@rock/git/config.git"
+    "$LOCAL_DIR/content|https://github.com/iacobucci/valerioiacobucci.com-content|ssh://valerio@rock/git/content.git"
+    "$LOCAL_DIR/notes|https://github.com/iacobucci/notes|ssh://valerio@rock/git/notes.git"
+    "$LOCAL_DIR/script|https://github.com/iacobucci/script|ssh://valerio@rock/git/script.git"
+    "$LOCAL_DIR/templates|https://github.com/iacobucci/templates|ssh://valerio@rock/git/templates.git"
+)
+
+# Special password-store repository
+PASSWORD_STORE_DIR="$HOME/.local/share/password-store"
+PASSWORD_STORE_ORIGIN="ssh://valerio@rock/git/password-store"
+
+# Other forks & utility repositories to clone: "TARGET_DIRECTORY|REPO_GIT_URL|BRANCH"
+OTHER_REPOS=(
     "$LOCAL_DIR/forks/htop-vim|https://github.com/KoffeinFlummi/htop-vim.git|master"
-    "$LOCAL_DIR/forks/lf|git@github.com:iacobucci/lf.git|master"
-    "$LOCAL_DIR/source/rust/rstow|git@github.com:iacobucci/rstow.git|master"
-    "$LOCAL_DIR/source/cpp/pwdshort|git@github.com:iacobucci/pwdshort.git|master"
+    "$LOCAL_DIR/forks/lf|https://github.com/iacobucci/lf.git|master"
+    "$LOCAL_DIR/source/rust/rstow|https://github.com/iacobucci/rstow.git|master"
+    "$LOCAL_DIR/source/cpp/pwdshort|https://github.com/iacobucci/pwdshort.git|master"
 )
 
 # Packages to install (toolchains, libraries, development utilities)
@@ -622,11 +633,11 @@ Workflow stages:
     1. Storage       - Configure Android storage access (termux-setup-storage)
     2. Mirror Setup  - Select European mirrors via termux-change-repo
     3. Packages      - Install glibc-repo, x11-repo, compilers, and packages (${#PACKAGES[@]} pkgs)
-    4. Directories   - Create ~/.local/dir/{config,forks,notes,script,source,templates},
+    4. Directories   - Create ~/.local/dir/{config,content,forks,notes,script,source,templates},
                        generate ~/.local/dir/.update.sh, and link them into ~
     5. SSH Check     - Validate SSH private keys and permissions for git authentication
-    6. Clone Repos   - Clone private repos and forks into ~/.local/dir/
-    7. Compile       - Compile personal programs into ~/.local/bin (htop-vim, lf, rstow, pwdshort)
+    6. Clone Repos   - Clone personal repos (origin/rock/github remotes), password-store, and sync termux branch
+    7. Compile       - Compile programs (htop-vim, lf, rstow, pwdshort) and install totp-cli
     8. Dotfiles      - Run update in ~/config (rstow), symlink ~/config/termux to ~/.termux, and ~/.termux/zshenv to \$PREFIX/etc/zshenv
     9. Antigravity   - Configure /etc/hosts localhost and install Antigravity CLI (wallentx)
    10. Services      - Enable background daemons (sshd)
@@ -966,17 +977,151 @@ clone_or_update_repo() {
     fi
 }
 
+configure_personal_repo_remotes() {
+    local target="$1"
+    local github_url="$2"
+    local rock_url="$3"
+    local name
+    name="$(basename "$target")"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY-RUN] Configure remotes in $target:"
+        echo "          origin -> $github_url"
+        echo "          rock   -> $rock_url"
+        echo "          github -> $github_url"
+        return 0
+    fi
+
+    [[ -d "$target/.git" ]] || return 0
+
+    log_info "Configuring remotes for '$name' (origin, rock, github)..."
+
+    # 1. origin: https://github.com/iacobucci/...
+    if git -C "$target" remote get-url origin >/dev/null 2>&1; then
+        git -C "$target" remote set-url origin "$github_url"
+    else
+        git -C "$target" remote add origin "$github_url"
+    fi
+    git -C "$target" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+
+    # 2. rock: ssh://valerio@rock/git/...
+    if git -C "$target" remote get-url rock >/dev/null 2>&1; then
+        git -C "$target" remote set-url rock "$rock_url"
+    else
+        git -C "$target" remote add rock "$rock_url"
+    fi
+    git -C "$target" config remote.rock.fetch "+refs/heads/*:refs/remotes/origin/*"
+
+    # 3. github: https://github.com/iacobucci/...
+    if git -C "$target" remote get-url github >/dev/null 2>&1; then
+        git -C "$target" remote set-url github "$github_url"
+    else
+        git -C "$target" remote add github "$github_url"
+    fi
+    git -C "$target" config remote.github.fetch "+refs/heads/*:refs/remotes/github/*"
+}
+
+configure_password_store_remotes() {
+    local target="$PASSWORD_STORE_DIR"
+    local origin_url="$PASSWORD_STORE_ORIGIN"
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY-RUN] Configure remotes in $target (origin -> $origin_url)"
+        return 0
+    fi
+
+    [[ -d "$target/.git" ]] || return 0
+
+    log_info "Configuring remotes for 'password-store' (origin: $origin_url)..."
+
+    if git -C "$target" remote get-url origin >/dev/null 2>&1; then
+        git -C "$target" remote set-url origin "$origin_url"
+    else
+        git -C "$target" remote add origin "$origin_url"
+    fi
+    git -C "$target" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+}
+
+sync_termux_branch() {
+    local target="$1"
+    local name
+    name="$(basename "$target")"
+
+    log_info "Syncing '$name' to branch 'termux' and pulling updates..."
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY-RUN] (cd $target && git fetch origin && git checkout termux && git pull)"
+        return 0
+    fi
+
+    if [[ ! -d "$target/.git" ]]; then
+        log_warn "Repository '$name' not found at $target, skipping branch sync."
+        return 0
+    fi
+
+    (
+        cd "$target" || exit 0
+
+        # Fetch remote references from origin
+        git fetch origin 2>/dev/null || true
+
+        # Switch to or create local branch 'termux'
+        if git show-ref --verify --quiet refs/heads/termux; then
+            git checkout termux 2>/dev/null || true
+        elif git show-ref --verify --quiet refs/remotes/origin/termux; then
+            git checkout -b termux --track origin/termux 2>/dev/null || git checkout -b termux origin/termux 2>/dev/null || true
+        else
+            git checkout -b termux 2>/dev/null || true
+        fi
+
+        # Pull updates following user's device-branch workflow
+        if git show-ref --verify --quiet refs/remotes/origin/termux; then
+            git pull origin termux 2>/dev/null || true
+        fi
+
+        # Merge origin/master into termux
+        if git show-ref --verify --quiet refs/remotes/origin/master; then
+            git fetch origin master 2>/dev/null || true
+            git merge origin/master --no-edit 2>/dev/null || log_warn "Merge of origin/master in '$name' reported conflicts."
+        fi
+
+        # Update submodules if any
+        git submodule update --init --remote --recursive 2>/dev/null || true
+    ) || log_warn "Failed to sync branch 'termux' in $target."
+}
+
 step_clone_repos() {
     if [[ "$CLONE_REPOS" != true ]]; then
         log_step "Skipping repository cloning (--no-clone specified)."
         return 0
     fi
 
-    log_step "Cloning repositories and forks..."
-    for entry in "${REPOSITORIES_TO_CLONE[@]}"; do
+    log_step "Cloning repositories and setting up multi-remotes..."
+
+    # 1. Clone personal repositories into ~/.local/dir/
+    for entry in "${PERSONAL_REPOS[@]}"; do
+        IFS="|" read -r target github_url rock_url <<< "$entry"
+        clone_or_update_repo "$target" "$github_url" "termux"
+        configure_personal_repo_remotes "$target" "$github_url" "$rock_url"
+    done
+
+    # 2. Clone special password-store repository
+    run_cmd mkdir -p "$(dirname "$PASSWORD_STORE_DIR")" || true
+    clone_or_update_repo "$PASSWORD_STORE_DIR" "$PASSWORD_STORE_ORIGIN" "termux"
+    configure_password_store_remotes
+
+    # 3. Clone other forks and utilities
+    for entry in "${OTHER_REPOS[@]}"; do
         IFS="|" read -r target url branch <<< "$entry"
         clone_or_update_repo "$target" "$url" "$branch"
     done
+
+    # 4. Fetch, checkout 'termux' branch, and pull on each personal dir repo and password-store
+    log_info "Synchronizing 'termux' branch on personal repositories and password-store..."
+    for entry in "${PERSONAL_REPOS[@]}"; do
+        IFS="|" read -r target _ _ <<< "$entry"
+        sync_termux_branch "$target"
+    done
+    sync_termux_branch "$PASSWORD_STORE_DIR"
 }
 
 # ==============================================================================
@@ -1075,6 +1220,30 @@ compile_htop_vim() {
     fi
 }
 
+install_totp_cli() {
+    log_info "Installing totp-cli (WhyNotHugo/totp-cli)..."
+    if command -v totp >/dev/null 2>&1; then
+        log_info "totp-cli is already installed ($(command -v totp))."
+        return 0
+    fi
+
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY-RUN] pip install --break-system-packages totp || pip install totp"
+        return 0
+    fi
+
+    if command -v pip >/dev/null 2>&1 || command -v pip3 >/dev/null 2>&1; then
+        local pip_cmd
+        pip_cmd="$(command -v pip || command -v pip3)"
+        "$pip_cmd" install --break-system-packages totp 2>/dev/null \
+            || "$pip_cmd" install totp 2>/dev/null \
+            || "$pip_cmd" install --break-system-packages git+https://github.com/WhyNotHugo/totp-cli.git 2>/dev/null \
+            || log_warn "Failed to install totp-cli via pip."
+    else
+        log_warn "Neither 'pip' nor 'pip3' found; skipping totp-cli installation."
+    fi
+}
+
 step_compile_programs() {
     if [[ "$COMPILE_PROGRAMS" != true ]]; then
         log_step "Skipping program compilation (--no-compile specified)."
@@ -1082,12 +1251,13 @@ step_compile_programs() {
     fi
 
     log_step "Compiling personal programs and forks into ~/.local/bin..."
-    run_cmd mkdir -p "$HOME/.local/bin"
+    run_cmd mkdir -p "$HOME/.local/bin" || true
 
     compile_pwdshort
     compile_rstow
     compile_lf
     compile_htop_vim
+    install_totp_cli
 }
 
 # ==============================================================================
