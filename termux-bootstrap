@@ -45,7 +45,7 @@ REPOSITORIES_TO_CLONE=(
     "$LOCAL_DIR/config|git@github.com:iacobucci/config.git|termux"
     "$LOCAL_DIR/script|git@github.com:iacobucci/script.git|termux"
     "$LOCAL_DIR/notes|git@github.com:iacobucci/notes.git|termux"
-    "$LOCAL_DIR/templates|git@github.com:iacobucci/templates.git|master"
+    "$LOCAL_DIR/templates|https://github.com/iacobucci/templates.git|master"
     "$LOCAL_DIR/forks/htop-vim|https://github.com/KoffeinFlummi/htop-vim.git|master"
     "$LOCAL_DIR/forks/lf|git@github.com:iacobucci/lf.git|master"
     "$LOCAL_DIR/source/rust/rstow|git@github.com:iacobucci/rstow.git|master"
@@ -948,6 +948,16 @@ clone_or_update_repo() {
         if ! git clone --branch "$branch" "$url" "$target" 2>/dev/null; then
             # If cloning with specified branch failed, try default branch and checkout
             if ! git clone "$url" "$target" 2>/dev/null; then
+                # If SSH clone failed on GitHub, try HTTPS fallback
+                local alt_url=""
+                if [[ "$url" =~ ^git@github\.com:(.*)$ ]]; then
+                    alt_url="https://github.com/${BASH_REMATCH[1]}"
+                fi
+                if [[ -n "$alt_url" ]] && (git clone --branch "$branch" "$alt_url" "$target" 2>/dev/null || git clone "$alt_url" "$target" 2>/dev/null); then
+                    log_info "Cloned '$name' using HTTPS fallback: $alt_url"
+                    git -C "$target" checkout "$branch" 2>/dev/null || true
+                    return 0
+                fi
                 log_warn "Failed to clone '$name' from $url. You can clone it manually later."
                 return 0
             fi
