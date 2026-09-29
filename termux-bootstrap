@@ -1142,6 +1142,14 @@ step_clone_repos() {
     configure_rock_repo_remotes "$PASSWORD_STORE_DIR" "password-store" "$PASSWORD_STORE_ORIGIN"
 
     run_cmd mkdir -p "$(dirname "$GNUPG_DIR")" || true
+    if [[ "$DRY_RUN" == true ]]; then
+        echo "[DRY-RUN] [ -e $GNUPG_DIR ] && [ ! -d $GNUPG_DIR/.git ] && mv -f $GNUPG_DIR ${GNUPG_DIR}.old"
+    elif [[ ( -d "$GNUPG_DIR" || -L "$GNUPG_DIR" ) && ! -d "$GNUPG_DIR/.git" ]]; then
+        log_info "Existing '$GNUPG_DIR' is not a git repository. Moving to ${GNUPG_DIR}.old..."
+        [[ -e "${GNUPG_DIR}.old" ]] && rm -rf "${GNUPG_DIR}.old" 2>/dev/null || true
+        mv "$GNUPG_DIR" "${GNUPG_DIR}.old" || log_warn "Failed to move $GNUPG_DIR to ${GNUPG_DIR}.old."
+        chmod 700 "${GNUPG_DIR}.old" 2>/dev/null || true
+    fi
     clone_or_update_repo "$GNUPG_DIR" "$GNUPG_ORIGIN" "termux"
     configure_rock_repo_remotes "$GNUPG_DIR" "gnupg" "$GNUPG_ORIGIN"
     run_cmd chmod 700 "$GNUPG_DIR" 2>/dev/null || true
