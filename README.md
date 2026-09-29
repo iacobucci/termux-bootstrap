@@ -4,17 +4,12 @@ Script di bootstrap modulare e robusto per ambienti **Termux** su Android.
 
 ## Installazione rapida (one-liner via curl)
 
-Su un nuovo ambiente Termux è possibile avviare il bootstrap direttamente da remoto con:
+1. Trasferire le credenziali ssh in `.ssh/`
+
+2. Eseguire il comando:
 
 ```bash
-# Esecuzione completa diretta
-curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/heads/master/termux-bootstrap | bash
-
-# Simulazione (dry-run) passando argomenti a bash (-s -- <opzioni>)
-curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/heads/master/termux-bootstrap | bash -s -- --dry-run
-
-# Esempio saltando l'installazione dei pacchetti
-curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/heads/master/termux-bootstrap | bash -s -- --no-install-packages
+curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/heads/master/termux-bootstrap | bash -s -- #options
 ```
 
 ## Workflow
