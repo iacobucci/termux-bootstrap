@@ -21,7 +21,7 @@ SETUP_DOTFILES=true
 INSTALL_ANTIGRAVITY=true
 ENABLE_SERVICES=true
 DRY_RUN=false
-ASSUME_YES=false
+ASSUME_YES=true
 
 LOCAL_DIR="$HOME/.local/dir"
 
@@ -640,7 +640,8 @@ Options:
     --no-antigravity         Skip installing Antigravity CLI
     --antigravity            Install Antigravity CLI (default)
     --no-services            Skip enabling background services (sshd)
-    -y, --yes                Automatically answer yes to package manager prompts
+    -y, --yes, --noconfirm   Automatically answer yes to package manager prompts (default)
+    --confirm, --no-yes      Prompt interactively for confirmation during package installation
     -n, --dry-run            Simulate execution by printing commands without running them
     -h, --help               Display this help message and exit
 
@@ -743,8 +744,12 @@ parse_args() {
                 ENABLE_SERVICES=false
                 shift
                 ;;
-            -y|--yes)
+            -y|--yes|--noconfirm)
                 ASSUME_YES=true
+                shift
+                ;;
+            --confirm|--no-yes)
+                ASSUME_YES=false
                 shift
                 ;;
             -n|--dry-run)
@@ -853,7 +858,12 @@ step_packages() {
 
     local pkg_flags=()
     if [[ "$ASSUME_YES" == true ]]; then
-        pkg_flags+=("-y")
+        export DEBIAN_FRONTEND=noninteractive
+        if [[ "${TERMUX_APP_PACKAGE_MANAGER:-}" == "pacman" ]] || (command -v pacman >/dev/null 2>&1 && ! command -v apt >/dev/null 2>&1); then
+            pkg_flags+=("--noconfirm")
+        else
+            pkg_flags+=("-y")
+        fi
     fi
 
     log_info "Updating package lists..."

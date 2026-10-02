@@ -57,6 +57,7 @@ curl -fsSL https://raw.githubusercontent.com/iacobucci/termux-bootstrap/refs/hea
 | `--no-dotfiles` | Skip dotfiles configuration with `rstow` and `~/.termux` link |
 | `--no-antigravity` | Skip Antigravity CLI installation and `/etc/hosts` configuration |
 | `--no-services` | Skip enabling background services (`sshd`) |
-| `-y, --yes` | Automatically answer yes to package manager prompts |
+| `-y, --yes, --noconfirm` | Automatically answer yes to package manager prompts without confirmation (default) |
+| `--confirm, --no-yes` | Prompt interactively for confirmation during package installation |
 | `-n, --dry-run` | Show commands without executing them |
 | `-h, --help` | Display full help information |
