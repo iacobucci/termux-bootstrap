@@ -182,7 +182,6 @@ PACKAGES=(
     harfbuzz-icu
     harfbuzz
     hicolor-icon-theme
-    highway
     htop
     imagemagick
     imath
