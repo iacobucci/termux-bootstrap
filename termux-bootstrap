@@ -610,6 +610,9 @@ log_error() {
 run_cmd() {
     if [[ "$DRY_RUN" == true ]]; then
         echo "[DRY-RUN] $*"
+    elif [[ -r /dev/tty && -w /dev/tty ]]; then
+        # Direct stdin from controlling terminal so interactive prompts (e.g. dpkg conffile, git/ssh) work in pipes (curl | bash)
+        "$@" < /dev/tty
     else
         "$@"
     fi
@@ -863,6 +866,11 @@ step_packages() {
             pkg_flags+=("--noconfirm")
         else
             pkg_flags+=("-y")
+            # If no controlling terminal is available (e.g. headless CI or automated daemon),
+            # pass default conffile options so dpkg does not abort on EOF.
+            if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
+                pkg_flags+=("-o" "Dpkg::Options::=--force-confdef" "-o" "Dpkg::Options::=--force-confold")
+            fi
         fi
     fi
 
@@ -923,7 +931,7 @@ EOF_UPDATE
             echo "[DRY-RUN] ln -sn $LOCAL_DIR/$d $HOME/$d"
         done
     else
-        bash "$update_script" || log_warn "Some symlinks could not be created by $update_script."
+        run_cmd bash "$update_script" || log_warn "Some symlinks could not be created by $update_script."
     fi
 }
 
@@ -979,7 +987,7 @@ clone_or_update_repo() {
         if [[ "$DRY_RUN" == true ]]; then
             echo "[DRY-RUN] git -C $target pull --rebase"
         else
-            git -C "$target" pull --rebase 2>/dev/null || git -C "$target" pull 2>/dev/null || log_warn "Could not pull updates for '$name'. Continuing."
+            run_cmd git -C "$target" pull --rebase 2>/dev/null || run_cmd git -C "$target" pull 2>/dev/null || log_warn "Could not pull updates for '$name'. Continuing."
         fi
         return 0
     fi
@@ -997,23 +1005,23 @@ clone_or_update_repo() {
     if [[ "$DRY_RUN" == true ]]; then
         echo "[DRY-RUN] git clone --branch $branch $url $target"
     else
-        if ! git clone --branch "$branch" "$url" "$target" 2>/dev/null; then
+        if ! run_cmd git clone --branch "$branch" "$url" "$target" 2>/dev/null; then
             # If cloning with specified branch failed, try default branch and checkout
-            if ! git clone "$url" "$target" 2>/dev/null; then
+            if ! run_cmd git clone "$url" "$target" 2>/dev/null; then
                 # If SSH clone failed on GitHub, try HTTPS fallback
                 local alt_url=""
                 if [[ "$url" =~ ^git@github\.com:(.*)$ ]]; then
                     alt_url="https://github.com/${BASH_REMATCH[1]}"
                 fi
-                if [[ -n "$alt_url" ]] && (git clone --branch "$branch" "$alt_url" "$target" 2>/dev/null || git clone "$alt_url" "$target" 2>/dev/null); then
+                if [[ -n "$alt_url" ]] && (run_cmd git clone --branch "$branch" "$alt_url" "$target" 2>/dev/null || run_cmd git clone "$alt_url" "$target" 2>/dev/null); then
                     log_info "Cloned '$name' using HTTPS fallback: $alt_url"
-                    git -C "$target" checkout "$branch" 2>/dev/null || true
+                    run_cmd git -C "$target" checkout "$branch" 2>/dev/null || true
                     return 0
                 fi
                 log_warn "Failed to clone '$name' from $url. You can clone it manually later."
                 return 0
             fi
-            git -C "$target" checkout "$branch" 2>/dev/null || true
+            run_cmd git -C "$target" checkout "$branch" 2>/dev/null || true
         fi
     fi
 }
@@ -1104,30 +1112,30 @@ sync_termux_branch() {
         cd "$target" || exit 0
 
         # Fetch remote references from origin
-        git fetch origin 2>/dev/null || true
+        run_cmd git fetch origin 2>/dev/null || true
 
         # Switch to or create local branch 'termux'
         if git show-ref --verify --quiet refs/heads/termux; then
-            git checkout termux 2>/dev/null || true
+            run_cmd git checkout termux 2>/dev/null || true
         elif git show-ref --verify --quiet refs/remotes/origin/termux; then
-            git checkout -b termux --track origin/termux 2>/dev/null || git checkout -b termux origin/termux 2>/dev/null || true
+            run_cmd git checkout -b termux --track origin/termux 2>/dev/null || run_cmd git checkout -b termux origin/termux 2>/dev/null || true
         else
-            git checkout -b termux 2>/dev/null || true
+            run_cmd git checkout -b termux 2>/dev/null || true
         fi
 
         # Pull updates following user's device-branch workflow
         if git show-ref --verify --quiet refs/remotes/origin/termux; then
-            git pull origin termux 2>/dev/null || true
+            run_cmd git pull origin termux 2>/dev/null || true
         fi
 
         # Merge origin/master into termux
         if git show-ref --verify --quiet refs/remotes/origin/master; then
-            git fetch origin master 2>/dev/null || true
-            git merge origin/master --no-edit 2>/dev/null || log_warn "Merge of origin/master in '$name' reported conflicts."
+            run_cmd git fetch origin master 2>/dev/null || true
+            run_cmd git merge origin/master --no-edit 2>/dev/null || log_warn "Merge of origin/master in '$name' reported conflicts."
         fi
 
         # Update submodules if any
-        git submodule update --init --remote --recursive 2>/dev/null || true
+        run_cmd git submodule update --init --remote --recursive 2>/dev/null || true
     ) || log_warn "Failed to sync branch 'termux' in $target."
 }
 
@@ -1349,11 +1357,11 @@ step_dotfiles() {
                 export PATH="$HOME/.local/bin:$HOME/script:$PATH"
                 cd "$config_dir"
                 if [[ -x "$script_update" ]]; then
-                    "$script_update"
+                    run_cmd "$script_update"
                 elif [[ -x "./.update.sh" ]]; then
-                    ./.update.sh
+                    run_cmd ./.update.sh
                 elif [[ -f "./.update.sh" ]]; then
-                    bash ./.update.sh
+                    run_cmd bash ./.update.sh
                 else
                     log_warn "Neither $script_update nor $config_dir/.update.sh found or executable."
                 fi
