@@ -54,11 +54,11 @@ REPOSITORIES=(
 # Personal repositories in ~/.local/dir requiring multi-remote configuration (origin, rock, github)
 # Format: "TARGET_DIRECTORY|GITHUB_URL|ROCK_URL"
 PERSONAL_REPOS=(
-    "$LOCAL_DIR/config|https://github.com/iacobucci/config|ssh://valerio@rock/git/config.git"
-    "$LOCAL_DIR/content|https://github.com/iacobucci/valerioiacobucci.com-content|ssh://valerio@rock/git/content.git"
-    "$LOCAL_DIR/notes|https://github.com/iacobucci/notes|ssh://valerio@rock/git/notes.git"
-    "$LOCAL_DIR/script|https://github.com/iacobucci/script|ssh://valerio@rock/git/script.git"
-    "$LOCAL_DIR/templates|https://github.com/iacobucci/templates|ssh://valerio@rock/git/templates.git"
+    "$LOCAL_DIR/config|git@github.com:iacobucci/config.git|ssh://valerio@rock/git/config.git"
+    "$LOCAL_DIR/content|git@github.com:iacobucci/valerioiacobucci.com-content.git|ssh://valerio@rock/git/content.git"
+    "$LOCAL_DIR/notes|git@github.com:iacobucci/notes.git|ssh://valerio@rock/git/notes.git"
+    "$LOCAL_DIR/script|git@github.com:iacobucci/script.git|ssh://valerio@rock/git/script.git"
+    "$LOCAL_DIR/templates|git@github.com:iacobucci/templates.git|ssh://valerio@rock/git/templates.git"
 )
 
 # Special secure repositories (hosted on rock)
@@ -71,9 +71,9 @@ GNUPG_ORIGIN="ssh://valerio@rock/git/gnupg.git"
 # Other forks & utility repositories to clone: "TARGET_DIRECTORY|REPO_GIT_URL|BRANCH"
 OTHER_REPOS=(
     "$LOCAL_DIR/forks/htop-vim|https://github.com/KoffeinFlummi/htop-vim.git|master"
-    "$LOCAL_DIR/forks/lf|https://github.com/iacobucci/lf.git|master"
-    "$LOCAL_DIR/source/rust/rstow|https://github.com/iacobucci/rstow.git|master"
-    "$LOCAL_DIR/source/cpp/pwdshort|https://github.com/iacobucci/pwdshort.git|master"
+    "$LOCAL_DIR/forks/lf|git@github.com:iacobucci/lf.git|master"
+    "$LOCAL_DIR/source/rust/rstow|git@github.com:iacobucci/rstow.git|master"
+    "$LOCAL_DIR/source/cpp/pwdshort|git@github.com:iacobucci/pwdshort.git|master"
 )
 
 # Packages to install (toolchains, libraries, development utilities)
@@ -1044,7 +1044,7 @@ configure_personal_repo_remotes() {
 
     log_info "Configuring remotes for '$name' (origin, rock, github)..."
 
-    # 1. origin: https://github.com/iacobucci/...
+    # 1. origin: git@github.com:iacobucci/...
     if git -C "$target" remote get-url origin >/dev/null 2>&1; then
         git -C "$target" remote set-url origin "$github_url"
     else
@@ -1060,7 +1060,7 @@ configure_personal_repo_remotes() {
     fi
     git -C "$target" config remote.rock.fetch "+refs/heads/*:refs/remotes/origin/*"
 
-    # 3. github: https://github.com/iacobucci/...
+    # 3. github: git@github.com:iacobucci/...
     if git -C "$target" remote get-url github >/dev/null 2>&1; then
         git -C "$target" remote set-url github "$github_url"
     else
