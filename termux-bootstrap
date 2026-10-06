@@ -27,38 +27,38 @@ LOCAL_DIR="$HOME/.local/dir"
 
 # Python packages installed via pip
 PYTHON_PIP_PACKAGES=(
-    ptpython
-    mutagen
-    eyed3
-    requests
-    totp
+	ptpython
+	mutagen
+	eyed3
+	requests
+	totp
 )
 
 # Base directories maintained under ~/.local/dir
 BASE_DIRS=(
-    config
-    content
-    forks
-    notes
-    script
-    source
-    templates
+	config
+	content
+	forks
+	notes
+	script
+	source
+	templates
 )
 
 # Additional repositories to enable in Termux
 REPOSITORIES=(
-    glibc-repo
-    x11-repo
+	glibc-repo
+	x11-repo
 )
 
 # Personal repositories in ~/.local/dir requiring multi-remote configuration (origin, rock, github)
 # Format: "TARGET_DIRECTORY|GITHUB_URL|ROCK_URL"
 PERSONAL_REPOS=(
-    "$LOCAL_DIR/config|git@github.com:iacobucci/config.git|ssh://valerio@rock/git/config.git"
-    "$LOCAL_DIR/content|git@github.com:iacobucci/valerioiacobucci.com-content.git|ssh://valerio@rock/git/content.git"
-    "$LOCAL_DIR/notes|git@github.com:iacobucci/notes.git|ssh://valerio@rock/git/notes.git"
-    "$LOCAL_DIR/script|git@github.com:iacobucci/script.git|ssh://valerio@rock/git/script.git"
-    "$LOCAL_DIR/templates|git@github.com:iacobucci/templates.git|ssh://valerio@rock/git/templates.git"
+	"$LOCAL_DIR/config|git@github.com:iacobucci/config.git|ssh://valerio@rock/git/config.git"
+	"$LOCAL_DIR/content|git@github.com:iacobucci/valerioiacobucci.com-content.git|ssh://valerio@rock/git/content.git"
+	"$LOCAL_DIR/notes|git@github.com:iacobucci/notes.git|ssh://valerio@rock/git/notes.git"
+	"$LOCAL_DIR/script|git@github.com:iacobucci/script.git|ssh://valerio@rock/git/script.git"
+	"$LOCAL_DIR/templates|git@github.com:iacobucci/templates.git|ssh://valerio@rock/git/templates.git"
 )
 
 # Special secure repositories (hosted on rock)
@@ -70,555 +70,558 @@ GNUPG_ORIGIN="ssh://valerio@rock/git/gnupg.git"
 
 # Other forks & utility repositories to clone: "TARGET_DIRECTORY|REPO_GIT_URL|BRANCH"
 OTHER_REPOS=(
-    "$LOCAL_DIR/forks/htop-vim|https://github.com/KoffeinFlummi/htop-vim.git|master"
-    "$LOCAL_DIR/forks/lf|git@github.com:iacobucci/lf.git|master"
-    "$LOCAL_DIR/source/rust/rstow|git@github.com:iacobucci/rstow.git|master"
-    "$LOCAL_DIR/source/cpp/pwdshort|git@github.com:iacobucci/pwdshort.git|master"
+	"$LOCAL_DIR/forks/htop-vim|https://github.com/KoffeinFlummi/htop-vim.git|master"
+	"$LOCAL_DIR/forks/lf|git@github.com:iacobucci/lf.git|master"
+	"$LOCAL_DIR/source/rust/rstow|git@github.com:iacobucci/rstow.git|master"
+	"$LOCAL_DIR/source/cpp/pwdshort|git@github.com:iacobucci/pwdshort.git|master"
 )
 
 # Packages to install (toolchains, libraries, development utilities)
 PACKAGES=(
-    aapt
-    abseil-cpp
-    adwaita-icon-theme-legacy
-    adwaita-icon-theme
-    alsa-lib
-    alsa-plugins
-    android-tools
-    apt
-    at-spi2-core
-    atk
-    attr-glibc
-    attr
-    autoconf
-    automake
-    bash-completion-glibc
-    bash-glibc
-    bash
-    bat
-    bc
-    binutils-glibc
-    binutils-libs-glibc
-    binutils
-    bison
-    boost
-    brotli-glibc
-    brotli
-    build-essential
-    bzip2-glibc
-    bzip2
-    c-ares
-    ca-certificates-glibc
-    ca-certificates-java
-    ca-certificates
-    chafa
-    clang
-    cmake
-    cmocka
-    code-oss-extension-codelldb
-    code-oss
-    codelldb
-    command-not-found
-    coreutils-glibc
-    coreutils
-    cups
-    curl-glibc
-    curl
-    dash
-    dbus
-    debianutils
-    desktop-file-utils
-    dialog
-    diffutils
-    djvulibre
-    dnsutils
-    docker-cli
-    dos2unix
-    dpkg
-    e2fsprogs-glibc
-    ecl
-    ed
-    electron-for-code-oss
-    entr
-    fd
-    ffmpeg
-    fftw
-    file
-    findutils-glibc
-    findutils
-    flex
-    fmt
-    fontconfig
-    freetype
-    fribidi
-    fzf
-    game-music-emu
-    gawk
-    gcc-libs-glibc
-    gdbm-glibc
-    gdbm
-    gdk-pixbuf
-    gh
-    ghostscript
-    giflib
-    git
-    glib
-    glibc-repo
-    glibc-runner
-    glibc
-    glslang
-    gnupg
-    golang
-    gperf
-    gpgme
-    gpgmepp
-    gpgv
-    graphviz
-    grep-glibc
-    grep
-    gtk-update-icon-cache
-    gtk3
-    gzip
-    harfbuzz-icu
-    harfbuzz
-    hicolor-icon-theme
-    htop
-    imagemagick
-    imath
-    imlib2
-    inetutils
-    iproute2
-    janet
-    jbig2dec
-    jq
-    json-c-glibc
-    json-c
-    jsoncpp
-    krb5-glibc
-    krb5
-    ldns
-    leptonica
-    less-glibc
-    less
-    libacl-glibc
-    libacl
-    libandroid-complex-math
-    libandroid-execinfo
-    libandroid-glob
-    libandroid-posix-semaphore
-    libandroid-selinux
-    libandroid-shmem
-    libandroid-spawn
-    libandroid-stub
-    libandroid-support
-    libandroid-sysv-semaphore
-    libandroid-utimes
-    libandroid-wordexp
-    libao
-    libaom
-    libarchive
-    libass
-    libassuan
-    libavif
-    libbcprov-java
-    libblkid-glibc
-    libbluray
-    libbs2b
-    libbsd
-    libbz2-glibc
-    libbz2
-    libc++
-    libcaca
-    libcairo
-    libcap-glibc
-    libcap-ng-glibc
-    libcap-ng
-    libcap
-    libchromaprint
-    libcommons-lang3-java
-    libcompiler-rt
-    libcrypt
-    libcurl-glibc
-    libcurl
-    libdav1d
-    libdb-glibc
-    libdb
-    libde265
-    libdebuginfod-glibc
-    libdrm
-    libdvdnav
-    libdvdread
-    libedit
-    libelf-glibc
-    libepoxy
-    libevdev
-    libevent-glibc
-    libevent
-    libexpat
-    libffi
-    libflac
-    libgc
-    libgcrypt
-    libgd
-    libgit2
-    libglvnd
-    libgmp-glibc
-    libgmp
-    libgnutls
-    libgpg-error
-    libgraphite
-    libgts
-    libheif
-    libice
-    libiconv
-    libicu
-    libid3tag
-    libidn2-glibc
-    libidn2
-    libidn
-    libjanet
-    libjansson-glibc
-    libjasper
-    libjpeg-turbo
-    libjxl
-    libksba
-    libllvm
-    liblqr
-    libltdl
-    liblz4-glibc
-    liblz4
-    liblzma-glibc
-    liblzma
-    liblzo
-    libmad
-    libmagic
-    libmd
-    libminizip
-    libmodplug
-    libmp3lame
-    libmpdclient
-    libmpfr
-    libmpg123
-    libmsgpack
-    libmysofa
-    libnettle
-    libnfs
-    libnghttp2-glibc
-    libnghttp2
-    libnghttp3
-    libngtcp2
-    libnpth
-    libnspr
-    libnss
-    libogg
-    libopenblas
-    libopencore-amr
-    libopenmpt
-    libopus
-    libpam-glibc
-    libpaper
-    libpcap
-    libpixman
-    libplacebo
-    libpng
-    libprotobuf
-    libpsl-glibc
-    libraqm
-    librav1e
-    libraw
-    libresolv-wrapper
-    librsvg
-    libsamplerate
-    libsecret
-    libsm
-    libsmartcols-glibc
-    libsmartcols
-    libsndfile
-    libsodium
-    libsoxr
-    libsqlite
-    libsrt
-    libssh2-glibc
-    libssh2
-    libssh
-    libtalloc
-    libtasn1
-    libtheora
-    libtiff
-    libtirpc
-    libtool
-    libudfread
-    libunbound
-    libunibilium
-    libunistring-glibc
-    libunistring
-    libunwind-glibc
-    liburcu
-    libuuid-glibc
-    libuuid
-    libuv
-    libv4l
-    libverto-glibc
-    libvidstab
-    libvmaf
-    libvo-amrwbenc
-    libvorbis
-    libvpx
-    libvterm
-    libwavpack
-    libwayland
-    libwebp
-    libwebrtc-audio-processing
-    libx11
-    libx264
-    libx265
-    libxau
-    libxcb
-    libxcomposite
-    libxcrypt-glibc
-    libxcursor
-    libxdamage
-    libxdmcp
-    libxext
-    libxfixes
-    libxft
-    libxi
-    libxinerama
-    libxkbcommon
-    libxkbfile
-    libxml2
-    libxmu
-    libxrandr
-    libxrender
-    libxshmfence
-    libxt
-    libxtst
-    libxxf86vm
-    libyaml
-    libzimg
-    libzip
-    libzmq
-    libzopfli
-    linux-api-headers-glibc
-    littlecms
-    lld
-    lldb
-    llvm
-    lr
-    lsd
-    lsof
-    lua51-lpeg
-    lua51
-    lua52
-    lua54
-    luajit
-    luv
-    lz4
-    m4
-    make
-    mandoc
-    manpages
-    mesa-vulkan-icd-swrast
-    mesa
-    mpc
-    mpd
-    nano
-    ncmpcpp
-    ncurses-glibc
-    ncurses-ui-libs
-    ncurses-utils
-    ncurses
-    ndk-sysroot
-    neovim
-    net-tools
-    netcat-openbsd
-    nmap
-    nodejs
-    npm
-    ocl-icd
-    ol
-    ollama
-    oniguruma
-    openal-soft
-    openexr
-    opengl
-    openjdk-17-x
-    openjdk-17
-    openjdk-21-x
-    openjdk-21
-    openjpeg
-    openssh-sftp-server
-    openssh
-    openssl-glibc
-    openssl-tool
-    openssl
-    ossp-uuid
-    p11-kit
-    pandoc
-    pango
-    pass
-    patch
-    patchelf-glibc
-    patchelf
-    pcre2-glibc
-    pcre2
-    pdftk
-    perl-glibc
-    perl
-    picolisp
-    pinentry
-    pkg-config
-    poppler
-    procps
-    proot-distro
-    proot
-    psmisc
-    pulseaudio
-    python-brotli
-    python-ensurepip-wheels
-    python-greenlet
-    python-msgpack
-    python-numpy
-    python-pip
-    python-pycryptodomex
-    python-pynvim
-    python-yt-dlp
-    python2
-    python
-    racket
-    readline-glibc
-    readline
-    redis
-    resolv-conf
-    rhash
-    ripgrep
-    rubberband
-    ruby
-    runit
-    rust-std-aarch64-linux-android
-    rust
-    sbcl
-    screenfetch
-    sed-glibc
-    sed
-    shared-mime-info
-    speexdsp
-    sqlite
-    sshpass
-    step-cli
-    strace-glibc
-    stylua
-    svt-av1
-    swi-prolog
-    taglib
-    tar-glibc
-    tar
-    teckit
-    termux-am-socket
-    termux-am
-    termux-api
-    termux-auth
-    termux-core
-    termux-exec-glibc
-    termux-exec
-    termux-keyring
-    termux-licenses
-    termux-services
-    termux-tools
-    texlive-bin
-    texlive-installer
-    tmux
-    toilet
-    tree-sitter-bash
-    tree-sitter-c
-    tree-sitter-css
-    tree-sitter-go
-    tree-sitter-html
-    tree-sitter-java
-    tree-sitter-javascript
-    tree-sitter-json
-    tree-sitter-latex
-    tree-sitter-lua
-    tree-sitter-markdown
-    tree-sitter-parsers
-    tree-sitter-python
-    tree-sitter-query
-    tree-sitter-regex
-    tree-sitter-rust
-    tree-sitter-sql
-    tree-sitter-toml
-    tree-sitter-vim
-    tree-sitter-vimdoc
-    tree-sitter-xml
-    tree-sitter-yaml
-    tree-sitter
-    tree
-    ttf-dejavu
-    typst
-    unixodbc
-    unzip
-    utf8cpp
-    utf8proc
-    util-linux-glibc
-    util-linux
-    uuid-utils
-    vsix-package-codelldb
-    vulkan-icd
-    vulkan-loader-generic
-    vulkan-loader
-    wget
-    x11-repo
-    xclip
-    xkeyboard-config
-    xorg-util-macros
-    xorgproto
-    xvidcore
-    xxhash
-    xz-utils-glibc
-    xz-utils
-    yajl
-    yt-dlp-ejs
-    zip
-    zlib-glibc
-    zlib
-    zsh-completions
-    zsh
-    zstd-glibc
-    zstd
+	sudo
+	tsu
+	hub
+	aapt
+	abseil-cpp
+	adwaita-icon-theme-legacy
+	adwaita-icon-theme
+	alsa-lib
+	alsa-plugins
+	android-tools
+	apt
+	at-spi2-core
+	atk
+	attr-glibc
+	attr
+	autoconf
+	automake
+	bash-completion-glibc
+	bash-glibc
+	bash
+	bat
+	bc
+	binutils-glibc
+	binutils-libs-glibc
+	binutils
+	bison
+	boost
+	brotli-glibc
+	brotli
+	build-essential
+	bzip2-glibc
+	bzip2
+	c-ares
+	ca-certificates-glibc
+	ca-certificates-java
+	ca-certificates
+	chafa
+	clang
+	cmake
+	cmocka
+	code-oss-extension-codelldb
+	code-oss
+	codelldb
+	command-not-found
+	coreutils-glibc
+	coreutils
+	cups
+	curl-glibc
+	curl
+	dash
+	dbus
+	debianutils
+	desktop-file-utils
+	dialog
+	diffutils
+	djvulibre
+	dnsutils
+	docker-cli
+	dos2unix
+	dpkg
+	e2fsprogs-glibc
+	ecl
+	ed
+	electron-for-code-oss
+	entr
+	fd
+	ffmpeg
+	fftw
+	file
+	findutils-glibc
+	findutils
+	flex
+	fmt
+	fontconfig
+	freetype
+	fribidi
+	fzf
+	game-music-emu
+	gawk
+	gcc-libs-glibc
+	gdbm-glibc
+	gdbm
+	gdk-pixbuf
+	gh
+	ghostscript
+	giflib
+	git
+	glib
+	glibc-repo
+	glibc-runner
+	glibc
+	glslang
+	gnupg
+	golang
+	gperf
+	gpgme
+	gpgmepp
+	gpgv
+	graphviz
+	grep-glibc
+	grep
+	gtk-update-icon-cache
+	gtk3
+	gzip
+	harfbuzz-icu
+	harfbuzz
+	hicolor-icon-theme
+	htop
+	imagemagick
+	imath
+	imlib2
+	inetutils
+	iproute2
+	janet
+	jbig2dec
+	jq
+	json-c-glibc
+	json-c
+	jsoncpp
+	krb5-glibc
+	krb5
+	ldns
+	leptonica
+	less-glibc
+	less
+	libacl-glibc
+	libacl
+	libandroid-complex-math
+	libandroid-execinfo
+	libandroid-glob
+	libandroid-posix-semaphore
+	libandroid-selinux
+	libandroid-shmem
+	libandroid-spawn
+	libandroid-stub
+	libandroid-support
+	libandroid-sysv-semaphore
+	libandroid-utimes
+	libandroid-wordexp
+	libao
+	libaom
+	libarchive
+	libass
+	libassuan
+	libavif
+	libbcprov-java
+	libblkid-glibc
+	libbluray
+	libbs2b
+	libbsd
+	libbz2-glibc
+	libbz2
+	libc++
+	libcaca
+	libcairo
+	libcap-glibc
+	libcap-ng-glibc
+	libcap-ng
+	libcap
+	libchromaprint
+	libcommons-lang3-java
+	libcompiler-rt
+	libcrypt
+	libcurl-glibc
+	libcurl
+	libdav1d
+	libdb-glibc
+	libdb
+	libde265
+	libdebuginfod-glibc
+	libdrm
+	libdvdnav
+	libdvdread
+	libedit
+	libelf-glibc
+	libepoxy
+	libevdev
+	libevent-glibc
+	libevent
+	libexpat
+	libffi
+	libflac
+	libgc
+	libgcrypt
+	libgd
+	libgit2
+	libglvnd
+	libgmp-glibc
+	libgmp
+	libgnutls
+	libgpg-error
+	libgraphite
+	libgts
+	libheif
+	libice
+	libiconv
+	libicu
+	libid3tag
+	libidn2-glibc
+	libidn2
+	libidn
+	libjanet
+	libjansson-glibc
+	libjasper
+	libjpeg-turbo
+	libjxl
+	libksba
+	libllvm
+	liblqr
+	libltdl
+	liblz4-glibc
+	liblz4
+	liblzma-glibc
+	liblzma
+	liblzo
+	libmad
+	libmagic
+	libmd
+	libminizip
+	libmodplug
+	libmp3lame
+	libmpdclient
+	libmpfr
+	libmpg123
+	libmsgpack
+	libmysofa
+	libnettle
+	libnfs
+	libnghttp2-glibc
+	libnghttp2
+	libnghttp3
+	libngtcp2
+	libnpth
+	libnspr
+	libnss
+	libogg
+	libopenblas
+	libopencore-amr
+	libopenmpt
+	libopus
+	libpam-glibc
+	libpaper
+	libpcap
+	libpixman
+	libplacebo
+	libpng
+	libprotobuf
+	libpsl-glibc
+	libraqm
+	librav1e
+	libraw
+	libresolv-wrapper
+	librsvg
+	libsamplerate
+	libsecret
+	libsm
+	libsmartcols-glibc
+	libsmartcols
+	libsndfile
+	libsodium
+	libsoxr
+	libsqlite
+	libsrt
+	libssh2-glibc
+	libssh2
+	libssh
+	libtalloc
+	libtasn1
+	libtheora
+	libtiff
+	libtirpc
+	libtool
+	libudfread
+	libunbound
+	libunibilium
+	libunistring-glibc
+	libunistring
+	libunwind-glibc
+	liburcu
+	libuuid-glibc
+	libuuid
+	libuv
+	libv4l
+	libverto-glibc
+	libvidstab
+	libvmaf
+	libvo-amrwbenc
+	libvorbis
+	libvpx
+	libvterm
+	libwavpack
+	libwayland
+	libwebp
+	libwebrtc-audio-processing
+	libx11
+	libx264
+	libx265
+	libxau
+	libxcb
+	libxcomposite
+	libxcrypt-glibc
+	libxcursor
+	libxdamage
+	libxdmcp
+	libxext
+	libxfixes
+	libxft
+	libxi
+	libxinerama
+	libxkbcommon
+	libxkbfile
+	libxml2
+	libxmu
+	libxrandr
+	libxrender
+	libxshmfence
+	libxt
+	libxtst
+	libxxf86vm
+	libyaml
+	libzimg
+	libzip
+	libzmq
+	libzopfli
+	linux-api-headers-glibc
+	littlecms
+	lld
+	lldb
+	llvm
+	lr
+	lsd
+	lsof
+	lua51-lpeg
+	lua51
+	lua52
+	lua54
+	luajit
+	luv
+	lz4
+	m4
+	make
+	mandoc
+	manpages
+	mesa-vulkan-icd-swrast
+	mesa
+	mpc
+	mpd
+	nano
+	ncmpcpp
+	ncurses-glibc
+	ncurses-ui-libs
+	ncurses-utils
+	ncurses
+	ndk-sysroot
+	neovim
+	net-tools
+	netcat-openbsd
+	nmap
+	nodejs
+	npm
+	ocl-icd
+	ol
+	ollama
+	oniguruma
+	openal-soft
+	openexr
+	opengl
+	openjdk-17-x
+	openjdk-17
+	openjdk-21-x
+	openjdk-21
+	openjpeg
+	openssh-sftp-server
+	openssh
+	openssl-glibc
+	openssl-tool
+	openssl
+	ossp-uuid
+	p11-kit
+	pandoc
+	pango
+	pass
+	patch
+	patchelf-glibc
+	patchelf
+	pcre2-glibc
+	pcre2
+	pdftk
+	perl-glibc
+	perl
+	picolisp
+	pinentry
+	pkg-config
+	poppler
+	procps
+	proot-distro
+	proot
+	psmisc
+	pulseaudio
+	python-brotli
+	python-ensurepip-wheels
+	python-greenlet
+	python-msgpack
+	python-numpy
+	python-pip
+	python-pycryptodomex
+	python-pynvim
+	python-yt-dlp
+	python2
+	python
+	racket
+	readline-glibc
+	readline
+	redis
+	resolv-conf
+	rhash
+	ripgrep
+	rubberband
+	ruby
+	runit
+	rust-std-aarch64-linux-android
+	rust
+	sbcl
+	screenfetch
+	sed-glibc
+	sed
+	shared-mime-info
+	speexdsp
+	sqlite
+	sshpass
+	step-cli
+	strace-glibc
+	stylua
+	svt-av1
+	swi-prolog
+	taglib
+	tar-glibc
+	tar
+	teckit
+	termux-am-socket
+	termux-am
+	termux-api
+	termux-auth
+	termux-core
+	termux-exec-glibc
+	termux-exec
+	termux-keyring
+	termux-licenses
+	termux-services
+	termux-tools
+	texlive-bin
+	texlive-installer
+	tmux
+	toilet
+	tree-sitter-bash
+	tree-sitter-c
+	tree-sitter-css
+	tree-sitter-go
+	tree-sitter-html
+	tree-sitter-java
+	tree-sitter-javascript
+	tree-sitter-json
+	tree-sitter-latex
+	tree-sitter-lua
+	tree-sitter-markdown
+	tree-sitter-parsers
+	tree-sitter-python
+	tree-sitter-query
+	tree-sitter-regex
+	tree-sitter-rust
+	tree-sitter-sql
+	tree-sitter-toml
+	tree-sitter-vim
+	tree-sitter-vimdoc
+	tree-sitter-xml
+	tree-sitter-yaml
+	tree-sitter
+	tree
+	ttf-dejavu
+	typst
+	unixodbc
+	unzip
+	utf8cpp
+	utf8proc
+	util-linux-glibc
+	util-linux
+	uuid-utils
+	vsix-package-codelldb
+	vulkan-icd
+	vulkan-loader-generic
+	vulkan-loader
+	wget
+	x11-repo
+	xclip
+	xkeyboard-config
+	xorg-util-macros
+	xorgproto
+	xvidcore
+	xxhash
+	xz-utils-glibc
+	xz-utils
+	yajl
+	yt-dlp-ejs
+	zip
+	zlib-glibc
+	zlib
+	zsh-completions
+	zsh
+	zstd-glibc
+	zstd
 )
 
 # ==============================================================================
 # LOGGING & UTILITY HELPERS
 # ==============================================================================
 log_step() {
-    echo -e "\n==> $1"
+	echo -e "\n==> $1"
 }
 
 log_info() {
-    echo "    $1"
+	echo "    $1"
 }
 
 log_warn() {
-    echo "    [!] $1" >&2
+	echo "    [!] $1" >&2
 }
 
 log_error() {
-    echo "Error: $1" >&2
+	echo "Error: $1" >&2
 }
 
 run_cmd() {
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] $*"
-    elif [[ -r /dev/tty && -w /dev/tty ]]; then
-        # Direct stdin from controlling terminal so interactive prompts (e.g. dpkg conffile, git/ssh) work in pipes (curl | bash)
-        "$@" < /dev/tty
-    else
-        "$@"
-    fi
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] $*"
+	elif [[ -r /dev/tty && -w /dev/tty ]]; then
+		# Direct stdin from controlling terminal so interactive prompts (e.g. dpkg conffile, git/ssh) work in pipes (curl | bash)
+		"$@" </dev/tty
+	else
+		"$@"
+	fi
 }
 
 usage() {
-    cat <<EOF
+	cat <<EOF
 Usage: $(basename "$0") [OPTIONS]
 
 Bootstrap and configure a Termux environment.
@@ -672,243 +675,243 @@ EOF
 # CLI ARGUMENT PARSING
 # ==============================================================================
 parse_args() {
-    while [[ $# -gt 0 ]]; do
-        case "$1" in
-            --no-install-packages)
-                INSTALL_PACKAGES=false
-                shift
-                ;;
-            --install-packages)
-                INSTALL_PACKAGES=true
-                shift
-                ;;
-            --no-storage|--no-setup-storage)
-                SETUP_STORAGE=false
-                shift
-                ;;
-            --no-change-repo)
-                CHANGE_REPO=false
-                shift
-                ;;
-            --change-repo)
-                CHANGE_REPO=true
-                shift
-                ;;
-            --no-dirs|--no-symlinks)
-                SETUP_DIRS=false
-                shift
-                ;;
-            --no-ssh-check)
-                CHECK_SSH=false
-                shift
-                ;;
-            --no-clone)
-                CLONE_REPOS=false
-                shift
-                ;;
-            --clone)
-                CLONE_REPOS=true
-                shift
-                ;;
-            --no-compile)
-                COMPILE_PROGRAMS=false
-                shift
-                ;;
-            --compile)
-                COMPILE_PROGRAMS=true
-                shift
-                ;;
-            --no-python|--no-python-packages)
-                INSTALL_PYTHON=false
-                shift
-                ;;
-            --python|--python-packages)
-                INSTALL_PYTHON=true
-                shift
-                ;;
-            --no-dotfiles)
-                SETUP_DOTFILES=false
-                shift
-                ;;
-            --dotfiles)
-                SETUP_DOTFILES=true
-                shift
-                ;;
-            --no-antigravity)
-                INSTALL_ANTIGRAVITY=false
-                shift
-                ;;
-            --antigravity)
-                INSTALL_ANTIGRAVITY=true
-                shift
-                ;;
-            --no-services)
-                ENABLE_SERVICES=false
-                shift
-                ;;
-            -y|--yes|--noconfirm)
-                ASSUME_YES=true
-                shift
-                ;;
-            --confirm|--no-yes)
-                ASSUME_YES=false
-                shift
-                ;;
-            -n|--dry-run)
-                DRY_RUN=true
-                shift
-                ;;
-            -h|--help)
-                usage
-                exit 0
-                ;;
-            --)
-                shift
-                break
-                ;;
-            -*)
-                log_error "Unknown option '$1'"
-                echo "Try '$(basename "$0") --help' for more information." >&2
-                exit 1
-                ;;
-            *)
-                log_error "Unexpected positional argument '$1'"
-                echo "Try '$(basename "$0") --help' for more information." >&2
-                exit 1
-                ;;
-        esac
-    done
+	while [[ $# -gt 0 ]]; do
+		case "$1" in
+		--no-install-packages)
+			INSTALL_PACKAGES=false
+			shift
+			;;
+		--install-packages)
+			INSTALL_PACKAGES=true
+			shift
+			;;
+		--no-storage | --no-setup-storage)
+			SETUP_STORAGE=false
+			shift
+			;;
+		--no-change-repo)
+			CHANGE_REPO=false
+			shift
+			;;
+		--change-repo)
+			CHANGE_REPO=true
+			shift
+			;;
+		--no-dirs | --no-symlinks)
+			SETUP_DIRS=false
+			shift
+			;;
+		--no-ssh-check)
+			CHECK_SSH=false
+			shift
+			;;
+		--no-clone)
+			CLONE_REPOS=false
+			shift
+			;;
+		--clone)
+			CLONE_REPOS=true
+			shift
+			;;
+		--no-compile)
+			COMPILE_PROGRAMS=false
+			shift
+			;;
+		--compile)
+			COMPILE_PROGRAMS=true
+			shift
+			;;
+		--no-python | --no-python-packages)
+			INSTALL_PYTHON=false
+			shift
+			;;
+		--python | --python-packages)
+			INSTALL_PYTHON=true
+			shift
+			;;
+		--no-dotfiles)
+			SETUP_DOTFILES=false
+			shift
+			;;
+		--dotfiles)
+			SETUP_DOTFILES=true
+			shift
+			;;
+		--no-antigravity)
+			INSTALL_ANTIGRAVITY=false
+			shift
+			;;
+		--antigravity)
+			INSTALL_ANTIGRAVITY=true
+			shift
+			;;
+		--no-services)
+			ENABLE_SERVICES=false
+			shift
+			;;
+		-y | --yes | --noconfirm)
+			ASSUME_YES=true
+			shift
+			;;
+		--confirm | --no-yes)
+			ASSUME_YES=false
+			shift
+			;;
+		-n | --dry-run)
+			DRY_RUN=true
+			shift
+			;;
+		-h | --help)
+			usage
+			exit 0
+			;;
+		--)
+			shift
+			break
+			;;
+		-*)
+			log_error "Unknown option '$1'"
+			echo "Try '$(basename "$0") --help' for more information." >&2
+			exit 1
+			;;
+		*)
+			log_error "Unexpected positional argument '$1'"
+			echo "Try '$(basename "$0") --help' for more information." >&2
+			exit 1
+			;;
+		esac
+	done
 }
 
 # ==============================================================================
 # STEP 1: STORAGE SETUP
 # ==============================================================================
 step_storage() {
-    if [[ "$SETUP_STORAGE" != true ]]; then
-        log_step "Skipping Android storage configuration."
-        return 0
-    fi
+	if [[ "$SETUP_STORAGE" != true ]]; then
+		log_step "Skipping Android storage configuration."
+		return 0
+	fi
 
-    log_step "Configuring Android storage access..."
-    if [[ -d "$HOME/storage" ]]; then
-        log_info "Storage directory already exists ($HOME/storage). Skipping termux-setup-storage."
-        return 0
-    fi
+	log_step "Configuring Android storage access..."
+	if [[ -d "$HOME/storage" ]]; then
+		log_info "Storage directory already exists ($HOME/storage). Skipping termux-setup-storage."
+		return 0
+	fi
 
-    if command -v termux-setup-storage >/dev/null 2>&1; then
-        run_cmd termux-setup-storage || log_warn "'termux-setup-storage' returned non-zero (access may already be granted or permission dialog was dismissed). Continuing."
-    else
-        log_warn "'termux-setup-storage' command not found, skipping."
-    fi
+	if command -v termux-setup-storage >/dev/null 2>&1; then
+		run_cmd termux-setup-storage || log_warn "'termux-setup-storage' returned non-zero (access may already be granted or permission dialog was dismissed). Continuing."
+	else
+		log_warn "'termux-setup-storage' command not found, skipping."
+	fi
 }
 
 # ==============================================================================
 # STEP 2: REPOSITORY MIRROR CONFIGURATION
 # ==============================================================================
 step_change_repo() {
-    if [[ "$CHANGE_REPO" != true || "$INSTALL_PACKAGES" != true ]]; then
-        return 0
-    fi
+	if [[ "$CHANGE_REPO" != true || "$INSTALL_PACKAGES" != true ]]; then
+		return 0
+	fi
 
-    log_step "Configuring package mirror with termux-change-repo..."
-    local prefix_dir="${PREFIX:-/data/data/com.termux/files/usr}"
-    local eu_mirrors="$prefix_dir/etc/termux/mirrors/europe"
-    local chosen_mirrors="$prefix_dir/etc/termux/chosen_mirrors"
+	log_step "Configuring package mirror with termux-change-repo..."
+	local prefix_dir="${PREFIX:-/data/data/com.termux/files/usr}"
+	local eu_mirrors="$prefix_dir/etc/termux/mirrors/europe"
+	local chosen_mirrors="$prefix_dir/etc/termux/chosen_mirrors"
 
-    if command -v termux-change-repo >/dev/null 2>&1; then
-        if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] termux-change-repo < /dev/tty > /dev/tty"
-        elif [[ -r /dev/tty && -w /dev/tty ]]; then
-            # Direct stdin/stdout to controlling terminal so interactive dialog works even in pipes (curl | bash)
-            log_info "Launching termux-change-repo (select 'Mirrors in Europe' for optimal speeds)..."
-            termux-change-repo < /dev/tty > /dev/tty || log_warn "termux-change-repo was cancelled or encountered an issue."
-        elif [[ -t 0 ]]; then
-            log_info "Launching termux-change-repo (select 'Mirrors in Europe' for optimal speeds)..."
-            termux-change-repo || log_warn "termux-change-repo was cancelled or encountered an issue."
-        elif [[ -d "$eu_mirrors" ]]; then
-            log_info "Controlling terminal not available. Automatically setting European mirrors ($eu_mirrors)..."
-            ln -snf "$eu_mirrors" "$chosen_mirrors" 2>/dev/null || true
-        else
-            log_warn "Controlling terminal not available; skipping termux-change-repo."
-        fi
-    elif [[ -d "$eu_mirrors" ]]; then
-        if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] ln -snf $eu_mirrors $chosen_mirrors"
-        else
-            log_info "'termux-change-repo' not found. Setting European mirrors ($eu_mirrors)..."
-            ln -snf "$eu_mirrors" "$chosen_mirrors" 2>/dev/null || true
-        fi
-    else
-        log_warn "'termux-change-repo' command not found, skipping mirror selection."
-    fi
+	if command -v termux-change-repo >/dev/null 2>&1; then
+		if [[ "$DRY_RUN" == true ]]; then
+			echo "[DRY-RUN] termux-change-repo < /dev/tty > /dev/tty"
+		elif [[ -r /dev/tty && -w /dev/tty ]]; then
+			# Direct stdin/stdout to controlling terminal so interactive dialog works even in pipes (curl | bash)
+			log_info "Launching termux-change-repo (select 'Mirrors in Europe' for optimal speeds)..."
+			termux-change-repo </dev/tty >/dev/tty || log_warn "termux-change-repo was cancelled or encountered an issue."
+		elif [[ -t 0 ]]; then
+			log_info "Launching termux-change-repo (select 'Mirrors in Europe' for optimal speeds)..."
+			termux-change-repo || log_warn "termux-change-repo was cancelled or encountered an issue."
+		elif [[ -d "$eu_mirrors" ]]; then
+			log_info "Controlling terminal not available. Automatically setting European mirrors ($eu_mirrors)..."
+			ln -snf "$eu_mirrors" "$chosen_mirrors" 2>/dev/null || true
+		else
+			log_warn "Controlling terminal not available; skipping termux-change-repo."
+		fi
+	elif [[ -d "$eu_mirrors" ]]; then
+		if [[ "$DRY_RUN" == true ]]; then
+			echo "[DRY-RUN] ln -snf $eu_mirrors $chosen_mirrors"
+		else
+			log_info "'termux-change-repo' not found. Setting European mirrors ($eu_mirrors)..."
+			ln -snf "$eu_mirrors" "$chosen_mirrors" 2>/dev/null || true
+		fi
+	else
+		log_warn "'termux-change-repo' command not found, skipping mirror selection."
+	fi
 }
 
 # ==============================================================================
 # STEP 3: PACKAGE INSTALLATION
 # ==============================================================================
 step_packages() {
-    if [[ "$INSTALL_PACKAGES" != true ]]; then
-        log_step "Skipping package installation (--no-install-packages specified)."
-        return 0
-    fi
+	if [[ "$INSTALL_PACKAGES" != true ]]; then
+		log_step "Skipping package installation (--no-install-packages specified)."
+		return 0
+	fi
 
-    log_step "Installing Termux repositories and packages..."
-    if [[ "$DRY_RUN" == false ]] && ! command -v pkg >/dev/null 2>&1; then
-        log_error "'pkg' command not found. This script must be run inside Termux."
-        exit 1
-    fi
+	log_step "Installing Termux repositories and packages..."
+	if [[ "$DRY_RUN" == false ]] && ! command -v pkg >/dev/null 2>&1; then
+		log_error "'pkg' command not found. This script must be run inside Termux."
+		exit 1
+	fi
 
-    local pkg_flags=()
-    if [[ "$ASSUME_YES" == true ]]; then
-        export DEBIAN_FRONTEND=noninteractive
-        if [[ "${TERMUX_APP_PACKAGE_MANAGER:-}" == "pacman" ]] || (command -v pacman >/dev/null 2>&1 && ! command -v apt >/dev/null 2>&1); then
-            pkg_flags+=("--noconfirm")
-        else
-            pkg_flags+=("-y")
-            # If no controlling terminal is available (e.g. headless CI or automated daemon),
-            # pass default conffile options so dpkg does not abort on EOF.
-            if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
-                pkg_flags+=("-o" "Dpkg::Options::=--force-confdef" "-o" "Dpkg::Options::=--force-confold")
-            fi
-        fi
-    fi
+	local pkg_flags=()
+	if [[ "$ASSUME_YES" == true ]]; then
+		export DEBIAN_FRONTEND=noninteractive
+		if [[ "${TERMUX_APP_PACKAGE_MANAGER:-}" == "pacman" ]] || (command -v pacman >/dev/null 2>&1 && ! command -v apt >/dev/null 2>&1); then
+			pkg_flags+=("--noconfirm")
+		else
+			pkg_flags+=("-y")
+			# If no controlling terminal is available (e.g. headless CI or automated daemon),
+			# pass default conffile options so dpkg does not abort on EOF.
+			if [[ ! -r /dev/tty || ! -w /dev/tty ]]; then
+				pkg_flags+=("-o" "Dpkg::Options::=--force-confdef" "-o" "Dpkg::Options::=--force-confold")
+			fi
+		fi
+	fi
 
-    log_info "Updating package lists..."
-    run_cmd pkg update "${pkg_flags[@]}" || log_warn "'pkg update' returned non-zero. Continuing with repository setup..."
+	log_info "Updating package lists..."
+	run_cmd pkg update "${pkg_flags[@]}" || log_warn "'pkg update' returned non-zero. Continuing with repository setup..."
 
-    log_info "Enabling repositories (${REPOSITORIES[*]})..."
-    run_cmd pkg in "${pkg_flags[@]}" "${REPOSITORIES[@]}" || log_warn "Enabling additional repositories returned non-zero. Continuing..."
+	log_info "Enabling repositories (${REPOSITORIES[*]})..."
+	run_cmd pkg in "${pkg_flags[@]}" "${REPOSITORIES[@]}" || log_warn "Enabling additional repositories returned non-zero. Continuing..."
 
-    log_info "Installing packages (${#PACKAGES[@]} packages)..."
-    run_cmd pkg install "${pkg_flags[@]}" "${PACKAGES[@]}" || log_warn "Some packages failed to install. Continuing with bootstrap..."
+	log_info "Installing packages (${#PACKAGES[@]} packages)..."
+	run_cmd pkg install "${pkg_flags[@]}" "${PACKAGES[@]}" || log_warn "Some packages failed to install. Continuing with bootstrap..."
 }
 
 # ==============================================================================
 # STEP 4: DIRECTORY STRUCTURE & HOME SYMLINKS
 # ==============================================================================
 step_directories() {
-    if [[ "$SETUP_DIRS" != true ]]; then
-        log_step "Skipping directory structure and symlink creation."
-        return 0
-    fi
+	if [[ "$SETUP_DIRS" != true ]]; then
+		log_step "Skipping directory structure and symlink creation."
+		return 0
+	fi
 
-    log_step "Setting up ~/.local/dir structure and home symlinks..."
+	log_step "Setting up ~/.local/dir structure and home symlinks..."
 
-    # Ensure ~/.local/bin and ~/.local/dir exist
-    run_cmd mkdir -p "$HOME/.local/bin" || true
-    run_cmd mkdir -p "$LOCAL_DIR" || true
+	# Ensure ~/.local/bin and ~/.local/dir exist
+	run_cmd mkdir -p "$HOME/.local/bin" || true
+	run_cmd mkdir -p "$LOCAL_DIR" || true
 
-    for d in "${BASE_DIRS[@]}"; do
-        run_cmd mkdir -p "$LOCAL_DIR/$d" || true
-    done
+	for d in "${BASE_DIRS[@]}"; do
+		run_cmd mkdir -p "$LOCAL_DIR/$d" || true
+	done
 
-    # Write ~/.local/dir/.update.sh
-    local update_script="$LOCAL_DIR/.update.sh"
-    log_info "Writing $update_script..."
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] Create and chmod +x $update_script"
-    else
-        cat > "$update_script" << 'EOF_UPDATE'
+	# Write ~/.local/dir/.update.sh
+	local update_script="$LOCAL_DIR/.update.sh"
+	log_info "Writing $update_script..."
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] Create and chmod +x $update_script"
+	else
+		cat >"$update_script" <<'EOF_UPDATE'
 #!/bin/bash
 
 for f in $(ls $HOME/.local/dir); do
@@ -920,634 +923,634 @@ for f in $(ls $HOME/.local/dir); do
   $COMMAND
 done
 EOF_UPDATE
-        chmod +x "$update_script" 2>/dev/null || true
-    fi
+		chmod +x "$update_script" 2>/dev/null || true
+	fi
 
-    # Execute symlink creation
-    log_info "Creating symlinks from $LOCAL_DIR into $HOME..."
-    if [[ "$DRY_RUN" == true ]]; then
-        for d in "${BASE_DIRS[@]}"; do
-            echo "[DRY-RUN] ln -sn $LOCAL_DIR/$d $HOME/$d"
-        done
-    else
-        run_cmd bash "$update_script" || log_warn "Some symlinks could not be created by $update_script."
-    fi
+	# Execute symlink creation
+	log_info "Creating symlinks from $LOCAL_DIR into $HOME..."
+	if [[ "$DRY_RUN" == true ]]; then
+		for d in "${BASE_DIRS[@]}"; do
+			echo "[DRY-RUN] ln -sn $LOCAL_DIR/$d $HOME/$d"
+		done
+	else
+		run_cmd bash "$update_script" || log_warn "Some symlinks could not be created by $update_script."
+	fi
 }
 
 # ==============================================================================
 # STEP 5: SSH CREDENTIALS VERIFICATION
 # ==============================================================================
 step_ssh_check() {
-    if [[ "$CHECK_SSH" != true ]]; then
-        log_step "Skipping SSH credentials verification."
-        return 0
-    fi
+	if [[ "$CHECK_SSH" != true ]]; then
+		log_step "Skipping SSH credentials verification."
+		return 0
+	fi
 
-    log_step "Verifying SSH credentials in ~/.ssh/..."
-    local ssh_dir="$HOME/.ssh"
+	log_step "Verifying SSH credentials in ~/.ssh/..."
+	local ssh_dir="$HOME/.ssh"
 
-    if [[ ! -d "$ssh_dir" ]]; then
-        log_warn "Directory ~/.ssh does not exist."
-        log_warn "If cloning private repositories, please transfer your SSH keys to ~/.ssh/."
-        return 0
-    fi
+	if [[ ! -d "$ssh_dir" ]]; then
+		log_warn "Directory ~/.ssh does not exist."
+		log_warn "If cloning private repositories, please transfer your SSH keys to ~/.ssh/."
+		return 0
+	fi
 
-    run_cmd chmod 700 "$ssh_dir" 2>/dev/null || true
+	run_cmd chmod 700 "$ssh_dir" 2>/dev/null || true
 
-    local key_count=0
-    for key in "$ssh_dir"/id_*; do
-        if [[ -f "$key" && "$key" != *.pub ]]; then
-            key_count=$((key_count + 1))
-            run_cmd chmod 600 "$key" 2>/dev/null || true
-            log_info "Found SSH private key: $(basename "$key")"
-        fi
-    done
+	local key_count=0
+	for key in "$ssh_dir"/id_*; do
+		if [[ -f "$key" && "$key" != *.pub ]]; then
+			key_count=$((key_count + 1))
+			run_cmd chmod 600 "$key" 2>/dev/null || true
+			log_info "Found SSH private key: $(basename "$key")"
+		fi
+	done
 
-    if [[ $key_count -eq 0 ]]; then
-        log_warn "No SSH private key (e.g. id_ed25519, id_rsa) found in ~/.ssh/."
-        log_warn "Cloning private repositories via SSH may fail without credentials."
-    else
-        log_info "SSH directory permissions secured and $key_count key(s) verified."
-    fi
+	if [[ $key_count -eq 0 ]]; then
+		log_warn "No SSH private key (e.g. id_ed25519, id_rsa) found in ~/.ssh/."
+		log_warn "Cloning private repositories via SSH may fail without credentials."
+	else
+		log_info "SSH directory permissions secured and $key_count key(s) verified."
+	fi
 }
 
 # ==============================================================================
 # STEP 6: REPOSITORY CLONING
 # ==============================================================================
 clone_or_update_repo() {
-    local target="$1"
-    local url="$2"
-    local branch="${3:-master}"
-    local name
-    name="$(basename "$target")"
+	local target="$1"
+	local url="$2"
+	local branch="${3:-master}"
+	local name
+	name="$(basename "$target")"
 
-    if [[ -d "$target/.git" ]]; then
-        log_info "Repository '$name' already exists at $target. Fetching updates..."
-        if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] git -C $target pull --rebase"
-        else
-            run_cmd git -C "$target" pull --rebase 2>/dev/null || run_cmd git -C "$target" pull 2>/dev/null || log_warn "Could not pull updates for '$name'. Continuing."
-        fi
-        return 0
-    fi
+	if [[ -d "$target/.git" ]]; then
+		log_info "Repository '$name' already exists at $target. Fetching updates..."
+		if [[ "$DRY_RUN" == true ]]; then
+			echo "[DRY-RUN] git -C $target pull --rebase"
+		else
+			run_cmd git -C "$target" pull --rebase 2>/dev/null || run_cmd git -C "$target" pull 2>/dev/null || log_warn "Could not pull updates for '$name'. Continuing."
+		fi
+		return 0
+	fi
 
-    # If target directory exists without a git repository, remove it if empty so git clone succeeds
-    if [[ -d "$target" && ! -d "$target/.git" ]]; then
-        if [[ -z "$(ls -A "$target" 2>/dev/null)" ]]; then
-            run_cmd rmdir "$target" 2>/dev/null || true
-        fi
-    fi
+	# If target directory exists without a git repository, remove it if empty so git clone succeeds
+	if [[ -d "$target" && ! -d "$target/.git" ]]; then
+		if [[ -z "$(ls -A "$target" 2>/dev/null)" ]]; then
+			run_cmd rmdir "$target" 2>/dev/null || true
+		fi
+	fi
 
-    log_info "Cloning '$name' from $url (branch: $branch)..."
-    run_cmd mkdir -p "$(dirname "$target")"
+	log_info "Cloning '$name' from $url (branch: $branch)..."
+	run_cmd mkdir -p "$(dirname "$target")"
 
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] git clone --branch $branch $url $target"
-    else
-        if ! run_cmd git clone --branch "$branch" "$url" "$target" 2>/dev/null; then
-            # If cloning with specified branch failed, try default branch and checkout
-            if ! run_cmd git clone "$url" "$target" 2>/dev/null; then
-                # If SSH clone failed on GitHub, try HTTPS fallback
-                local alt_url=""
-                if [[ "$url" =~ ^git@github\.com:(.*)$ ]]; then
-                    alt_url="https://github.com/${BASH_REMATCH[1]}"
-                fi
-                if [[ -n "$alt_url" ]] && (run_cmd git clone --branch "$branch" "$alt_url" "$target" 2>/dev/null || run_cmd git clone "$alt_url" "$target" 2>/dev/null); then
-                    log_info "Cloned '$name' using HTTPS fallback: $alt_url"
-                    run_cmd git -C "$target" checkout "$branch" 2>/dev/null || true
-                    return 0
-                fi
-                log_warn "Failed to clone '$name' from $url. You can clone it manually later."
-                return 0
-            fi
-            run_cmd git -C "$target" checkout "$branch" 2>/dev/null || true
-        fi
-    fi
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] git clone --branch $branch $url $target"
+	else
+		if ! run_cmd git clone --branch "$branch" "$url" "$target" 2>/dev/null; then
+			# If cloning with specified branch failed, try default branch and checkout
+			if ! run_cmd git clone "$url" "$target" 2>/dev/null; then
+				# If SSH clone failed on GitHub, try HTTPS fallback
+				local alt_url=""
+				if [[ "$url" =~ ^git@github\.com:(.*)$ ]]; then
+					alt_url="https://github.com/${BASH_REMATCH[1]}"
+				fi
+				if [[ -n "$alt_url" ]] && (run_cmd git clone --branch "$branch" "$alt_url" "$target" 2>/dev/null || run_cmd git clone "$alt_url" "$target" 2>/dev/null); then
+					log_info "Cloned '$name' using HTTPS fallback: $alt_url"
+					run_cmd git -C "$target" checkout "$branch" 2>/dev/null || true
+					return 0
+				fi
+				log_warn "Failed to clone '$name' from $url. You can clone it manually later."
+				return 0
+			fi
+			run_cmd git -C "$target" checkout "$branch" 2>/dev/null || true
+		fi
+	fi
 }
 
 configure_personal_repo_remotes() {
-    local target="$1"
-    local github_url="$2"
-    local rock_url="$3"
-    local name
-    name="$(basename "$target")"
+	local target="$1"
+	local github_url="$2"
+	local rock_url="$3"
+	local name
+	name="$(basename "$target")"
 
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] Configure remotes in $target:"
-        echo "          origin -> $github_url"
-        echo "          rock   -> $rock_url"
-        echo "          github -> $github_url"
-        return 0
-    fi
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] Configure remotes in $target:"
+		echo "          origin -> $github_url"
+		echo "          rock   -> $rock_url"
+		echo "          github -> $github_url"
+		return 0
+	fi
 
-    [[ -d "$target/.git" ]] || return 0
+	[[ -d "$target/.git" ]] || return 0
 
-    log_info "Configuring remotes for '$name' (origin, rock, github)..."
+	log_info "Configuring remotes for '$name' (origin, rock, github)..."
 
-    # 1. origin: git@github.com:iacobucci/...
-    if git -C "$target" remote get-url origin >/dev/null 2>&1; then
-        git -C "$target" remote set-url origin "$github_url"
-    else
-        git -C "$target" remote add origin "$github_url"
-    fi
-    git -C "$target" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+	# 1. origin: git@github.com:iacobucci/...
+	if git -C "$target" remote get-url origin >/dev/null 2>&1; then
+		git -C "$target" remote set-url origin "$github_url"
+	else
+		git -C "$target" remote add origin "$github_url"
+	fi
+	git -C "$target" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 
-    # 2. rock: ssh://valerio@rock/git/...
-    if git -C "$target" remote get-url rock >/dev/null 2>&1; then
-        git -C "$target" remote set-url rock "$rock_url"
-    else
-        git -C "$target" remote add rock "$rock_url"
-    fi
-    git -C "$target" config remote.rock.fetch "+refs/heads/*:refs/remotes/origin/*"
+	# 2. rock: ssh://valerio@rock/git/...
+	if git -C "$target" remote get-url rock >/dev/null 2>&1; then
+		git -C "$target" remote set-url rock "$rock_url"
+	else
+		git -C "$target" remote add rock "$rock_url"
+	fi
+	git -C "$target" config remote.rock.fetch "+refs/heads/*:refs/remotes/origin/*"
 
-    # 3. github: git@github.com:iacobucci/...
-    if git -C "$target" remote get-url github >/dev/null 2>&1; then
-        git -C "$target" remote set-url github "$github_url"
-    else
-        git -C "$target" remote add github "$github_url"
-    fi
-    git -C "$target" config remote.github.fetch "+refs/heads/*:refs/remotes/github/*"
+	# 3. github: git@github.com:iacobucci/...
+	if git -C "$target" remote get-url github >/dev/null 2>&1; then
+		git -C "$target" remote set-url github "$github_url"
+	else
+		git -C "$target" remote add github "$github_url"
+	fi
+	git -C "$target" config remote.github.fetch "+refs/heads/*:refs/remotes/github/*"
 }
 
 configure_rock_repo_remotes() {
-    local target="$1"
-    local name="$2"
-    local origin_url="$3"
+	local target="$1"
+	local name="$2"
+	local origin_url="$3"
 
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] Configure remotes in $target (origin -> $origin_url)"
-        return 0
-    fi
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] Configure remotes in $target (origin -> $origin_url)"
+		return 0
+	fi
 
-    [[ -d "$target/.git" ]] || return 0
+	[[ -d "$target/.git" ]] || return 0
 
-    log_info "Configuring remotes for '$name' (origin: $origin_url)..."
+	log_info "Configuring remotes for '$name' (origin: $origin_url)..."
 
-    if git -C "$target" remote get-url origin >/dev/null 2>&1; then
-        git -C "$target" remote set-url origin "$origin_url"
-    else
-        git -C "$target" remote add origin "$origin_url"
-    fi
-    git -C "$target" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
+	if git -C "$target" remote get-url origin >/dev/null 2>&1; then
+		git -C "$target" remote set-url origin "$origin_url"
+	else
+		git -C "$target" remote add origin "$origin_url"
+	fi
+	git -C "$target" config remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 }
 
 sync_termux_branch() {
-    local target="$1"
-    local name
-    name="$(basename "$target")"
+	local target="$1"
+	local name
+	name="$(basename "$target")"
 
-    log_info "Syncing '$name' to branch 'termux' and pulling updates..."
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] (cd $target && git fetch origin && git checkout termux && git pull)"
-        return 0
-    fi
+	log_info "Syncing '$name' to branch 'termux' and pulling updates..."
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] (cd $target && git fetch origin && git checkout termux && git pull)"
+		return 0
+	fi
 
-    if [[ ! -d "$target/.git" ]]; then
-        log_warn "Repository '$name' not found at $target, skipping branch sync."
-        return 0
-    fi
+	if [[ ! -d "$target/.git" ]]; then
+		log_warn "Repository '$name' not found at $target, skipping branch sync."
+		return 0
+	fi
 
-    (
-        cd "$target" || exit 0
+	(
+		cd "$target" || exit 0
 
-        # Fetch remote references from origin
-        run_cmd git fetch origin 2>/dev/null || true
+		# Fetch remote references from origin
+		run_cmd git fetch origin 2>/dev/null || true
 
-        # Switch to or create local branch 'termux'
-        if git show-ref --verify --quiet refs/heads/termux; then
-            run_cmd git checkout termux 2>/dev/null || true
-        elif git show-ref --verify --quiet refs/remotes/origin/termux; then
-            run_cmd git checkout -b termux --track origin/termux 2>/dev/null || run_cmd git checkout -b termux origin/termux 2>/dev/null || true
-        else
-            run_cmd git checkout -b termux 2>/dev/null || true
-        fi
+		# Switch to or create local branch 'termux'
+		if git show-ref --verify --quiet refs/heads/termux; then
+			run_cmd git checkout termux 2>/dev/null || true
+		elif git show-ref --verify --quiet refs/remotes/origin/termux; then
+			run_cmd git checkout -b termux --track origin/termux 2>/dev/null || run_cmd git checkout -b termux origin/termux 2>/dev/null || true
+		else
+			run_cmd git checkout -b termux 2>/dev/null || true
+		fi
 
-        # Pull updates following user's device-branch workflow
-        if git show-ref --verify --quiet refs/remotes/origin/termux; then
-            run_cmd git pull origin termux 2>/dev/null || true
-        fi
+		# Pull updates following user's device-branch workflow
+		if git show-ref --verify --quiet refs/remotes/origin/termux; then
+			run_cmd git pull origin termux 2>/dev/null || true
+		fi
 
-        # Merge origin/master into termux
-        if git show-ref --verify --quiet refs/remotes/origin/master; then
-            run_cmd git fetch origin master 2>/dev/null || true
-            run_cmd git merge origin/master --no-edit 2>/dev/null || log_warn "Merge of origin/master in '$name' reported conflicts."
-        fi
+		# Merge origin/master into termux
+		if git show-ref --verify --quiet refs/remotes/origin/master; then
+			run_cmd git fetch origin master 2>/dev/null || true
+			run_cmd git merge origin/master --no-edit 2>/dev/null || log_warn "Merge of origin/master in '$name' reported conflicts."
+		fi
 
-        # Update submodules if any
-        run_cmd git submodule update --init --remote --recursive 2>/dev/null || true
-    ) || log_warn "Failed to sync branch 'termux' in $target."
+		# Update submodules if any
+		run_cmd git submodule update --init --remote --recursive 2>/dev/null || true
+	) || log_warn "Failed to sync branch 'termux' in $target."
 }
 
 step_clone_repos() {
-    if [[ "$CLONE_REPOS" != true ]]; then
-        log_step "Skipping repository cloning (--no-clone specified)."
-        return 0
-    fi
+	if [[ "$CLONE_REPOS" != true ]]; then
+		log_step "Skipping repository cloning (--no-clone specified)."
+		return 0
+	fi
 
-    log_step "Cloning repositories and setting up multi-remotes..."
+	log_step "Cloning repositories and setting up multi-remotes..."
 
-    # 1. Clone personal repositories into ~/.local/dir/
-    for entry in "${PERSONAL_REPOS[@]}"; do
-        IFS="|" read -r target github_url rock_url <<< "$entry"
-        clone_or_update_repo "$target" "$github_url" "termux"
-        configure_personal_repo_remotes "$target" "$github_url" "$rock_url"
-    done
+	# 1. Clone personal repositories into ~/.local/dir/
+	for entry in "${PERSONAL_REPOS[@]}"; do
+		IFS="|" read -r target github_url rock_url <<<"$entry"
+		clone_or_update_repo "$target" "$github_url" "termux"
+		configure_personal_repo_remotes "$target" "$github_url" "$rock_url"
+	done
 
-    # 2. Clone special repositories (password-store and gnupg from rock)
-    run_cmd mkdir -p "$(dirname "$PASSWORD_STORE_DIR")" || true
-    clone_or_update_repo "$PASSWORD_STORE_DIR" "$PASSWORD_STORE_ORIGIN" "termux"
-    configure_rock_repo_remotes "$PASSWORD_STORE_DIR" "password-store" "$PASSWORD_STORE_ORIGIN"
+	# 2. Clone special repositories (password-store and gnupg from rock)
+	run_cmd mkdir -p "$(dirname "$PASSWORD_STORE_DIR")" || true
+	clone_or_update_repo "$PASSWORD_STORE_DIR" "$PASSWORD_STORE_ORIGIN" "termux"
+	configure_rock_repo_remotes "$PASSWORD_STORE_DIR" "password-store" "$PASSWORD_STORE_ORIGIN"
 
-    run_cmd mkdir -p "$(dirname "$GNUPG_DIR")" || true
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] [ -e $GNUPG_DIR ] && [ ! -d $GNUPG_DIR/.git ] && mv -f $GNUPG_DIR ${GNUPG_DIR}.old"
-    elif [[ ( -d "$GNUPG_DIR" || -L "$GNUPG_DIR" ) && ! -d "$GNUPG_DIR/.git" ]]; then
-        log_info "Existing '$GNUPG_DIR' is not a git repository. Moving to ${GNUPG_DIR}.old..."
-        [[ -e "${GNUPG_DIR}.old" ]] && rm -rf "${GNUPG_DIR}.old" 2>/dev/null || true
-        mv "$GNUPG_DIR" "${GNUPG_DIR}.old" || log_warn "Failed to move $GNUPG_DIR to ${GNUPG_DIR}.old."
-        chmod 700 "${GNUPG_DIR}.old" 2>/dev/null || true
-    fi
-    clone_or_update_repo "$GNUPG_DIR" "$GNUPG_ORIGIN" "termux"
-    configure_rock_repo_remotes "$GNUPG_DIR" "gnupg" "$GNUPG_ORIGIN"
-    run_cmd chmod 700 "$GNUPG_DIR" 2>/dev/null || true
+	run_cmd mkdir -p "$(dirname "$GNUPG_DIR")" || true
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] [ -e $GNUPG_DIR ] && [ ! -d $GNUPG_DIR/.git ] && mv -f $GNUPG_DIR ${GNUPG_DIR}.old"
+	elif [[ (-d "$GNUPG_DIR" || -L "$GNUPG_DIR") && ! -d "$GNUPG_DIR/.git" ]]; then
+		log_info "Existing '$GNUPG_DIR' is not a git repository. Moving to ${GNUPG_DIR}.old..."
+		[[ -e "${GNUPG_DIR}.old" ]] && rm -rf "${GNUPG_DIR}.old" 2>/dev/null || true
+		mv "$GNUPG_DIR" "${GNUPG_DIR}.old" || log_warn "Failed to move $GNUPG_DIR to ${GNUPG_DIR}.old."
+		chmod 700 "${GNUPG_DIR}.old" 2>/dev/null || true
+	fi
+	clone_or_update_repo "$GNUPG_DIR" "$GNUPG_ORIGIN" "termux"
+	configure_rock_repo_remotes "$GNUPG_DIR" "gnupg" "$GNUPG_ORIGIN"
+	run_cmd chmod 700 "$GNUPG_DIR" 2>/dev/null || true
 
-    # 3. Clone other forks and utilities
-    for entry in "${OTHER_REPOS[@]}"; do
-        IFS="|" read -r target url branch <<< "$entry"
-        clone_or_update_repo "$target" "$url" "$branch"
-    done
+	# 3. Clone other forks and utilities
+	for entry in "${OTHER_REPOS[@]}"; do
+		IFS="|" read -r target url branch <<<"$entry"
+		clone_or_update_repo "$target" "$url" "$branch"
+	done
 
-    # 4. Fetch, checkout 'termux' branch, and pull on each personal dir repo, password-store, and gnupg
-    log_info "Synchronizing 'termux' branch on personal repositories, password-store, and gnupg..."
-    for entry in "${PERSONAL_REPOS[@]}"; do
-        IFS="|" read -r target _ _ <<< "$entry"
-        sync_termux_branch "$target"
-    done
-    sync_termux_branch "$PASSWORD_STORE_DIR"
-    sync_termux_branch "$GNUPG_DIR"
-    run_cmd chmod 700 "$GNUPG_DIR" 2>/dev/null || true
+	# 4. Fetch, checkout 'termux' branch, and pull on each personal dir repo, password-store, and gnupg
+	log_info "Synchronizing 'termux' branch on personal repositories, password-store, and gnupg..."
+	for entry in "${PERSONAL_REPOS[@]}"; do
+		IFS="|" read -r target _ _ <<<"$entry"
+		sync_termux_branch "$target"
+	done
+	sync_termux_branch "$PASSWORD_STORE_DIR"
+	sync_termux_branch "$GNUPG_DIR"
+	run_cmd chmod 700 "$GNUPG_DIR" 2>/dev/null || true
 }
 
 # ==============================================================================
 # STEP 7: COMPILING PERSONAL FORKS & UTILITIES
 # ==============================================================================
 compile_pwdshort() {
-    local dir="$LOCAL_DIR/source/cpp/pwdshort"
-    local out="$HOME/.local/bin/pwdshort"
-    if [[ ! -d "$dir" ]]; then
-        log_warn "pwdshort source not found at $dir, skipping."
-        return 0
-    fi
+	local dir="$LOCAL_DIR/source/cpp/pwdshort"
+	local out="$HOME/.local/bin/pwdshort"
+	if [[ ! -d "$dir" ]]; then
+		log_warn "pwdshort source not found at $dir, skipping."
+		return 0
+	fi
 
-    log_info "Compiling pwdshort -> $out"
-    local cxx
-    cxx="${CXX:-$(command -v clang++ || command -v g++ || echo c++)}"
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] $cxx -O3 $dir/pwdshort.cpp -o $out"
-    else
-        "$cxx" -O3 "$dir/pwdshort.cpp" -o "$out" || log_warn "Failed to compile pwdshort."
-    fi
+	log_info "Compiling pwdshort -> $out"
+	local cxx
+	cxx="${CXX:-$(command -v clang++ || command -v g++ || echo c++)}"
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] $cxx -O3 $dir/pwdshort.cpp -o $out"
+	else
+		"$cxx" -O3 "$dir/pwdshort.cpp" -o "$out" || log_warn "Failed to compile pwdshort."
+	fi
 }
 
 compile_rstow() {
-    local dir="$LOCAL_DIR/source/rust/rstow"
-    local out="$HOME/.local/bin/rstow"
-    if [[ ! -d "$dir" ]]; then
-        log_warn "rstow source not found at $dir, skipping."
-        return 0
-    fi
-    if ! command -v cargo >/dev/null 2>&1; then
-        log_warn "'cargo' command not found, skipping rstow compilation."
-        return 0
-    fi
+	local dir="$LOCAL_DIR/source/rust/rstow"
+	local out="$HOME/.local/bin/rstow"
+	if [[ ! -d "$dir" ]]; then
+		log_warn "rstow source not found at $dir, skipping."
+		return 0
+	fi
+	if ! command -v cargo >/dev/null 2>&1; then
+		log_warn "'cargo' command not found, skipping rstow compilation."
+		return 0
+	fi
 
-    log_info "Compiling rstow -> $out"
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] (cd $dir && CARGO_HOME=\"\${CARGO_HOME:-\$HOME/.local/share/cargo}\" cargo build --release && cp target/release/rstow $out)"
-    else
-        (
-            cd "$dir"
-            export CARGO_HOME="${CARGO_HOME:-$HOME/.local/share/cargo}"
-            cargo build --release
-            cp target/release/rstow "$out"
-        ) || log_warn "Failed to compile rstow."
-    fi
+	log_info "Compiling rstow -> $out"
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] (cd $dir && CARGO_HOME=\"\${CARGO_HOME:-\$HOME/.local/share/cargo}\" cargo build --release && cp target/release/rstow $out)"
+	else
+		(
+			cd "$dir"
+			export CARGO_HOME="${CARGO_HOME:-$HOME/.local/share/cargo}"
+			cargo build --release
+			cp target/release/rstow "$out"
+		) || log_warn "Failed to compile rstow."
+	fi
 }
 
 compile_lf() {
-    local dir="$LOCAL_DIR/forks/lf"
-    local out="$HOME/.local/bin/lf"
-    if [[ ! -d "$dir" ]]; then
-        log_warn "lf source not found at $dir, skipping."
-        return 0
-    fi
-    if ! command -v go >/dev/null 2>&1; then
-        log_warn "'go' command not found, skipping lf compilation."
-        return 0
-    fi
+	local dir="$LOCAL_DIR/forks/lf"
+	local out="$HOME/.local/bin/lf"
+	if [[ ! -d "$dir" ]]; then
+		log_warn "lf source not found at $dir, skipping."
+		return 0
+	fi
+	if ! command -v go >/dev/null 2>&1; then
+		log_warn "'go' command not found, skipping lf compilation."
+		return 0
+	fi
 
-    log_info "Compiling lf -> $out"
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] (cd $dir && env CGO_ENABLED=0 GOPATH=\"\${GOPATH:-\$HOME/.local/share/go}\" go build -ldflags=\"-s -w\" -o $out)"
-    else
-        (
-            cd "$dir"
-            env CGO_ENABLED=0 GOPATH="${GOPATH:-$HOME/.local/share/go}" go build -ldflags="-s -w" -o "$out"
-        ) || log_warn "Failed to compile lf."
-    fi
+	log_info "Compiling lf -> $out"
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] (cd $dir && env CGO_ENABLED=0 GOPATH=\"\${GOPATH:-\$HOME/.local/share/go}\" go build -ldflags=\"-s -w\" -o $out)"
+	else
+		(
+			cd "$dir"
+			env CGO_ENABLED=0 GOPATH="${GOPATH:-$HOME/.local/share/go}" go build -ldflags="-s -w" -o "$out"
+		) || log_warn "Failed to compile lf."
+	fi
 }
 
 compile_htop_vim() {
-    local dir="$LOCAL_DIR/forks/htop-vim"
-    local prefix_dest="${PREFIX:-$HOME/.local}"
-    if [[ ! -d "$dir" ]]; then
-        log_warn "htop-vim source not found at $dir, skipping."
-        return 0
-    fi
+	local dir="$LOCAL_DIR/forks/htop-vim"
+	local prefix_dest="${PREFIX:-$HOME/.local}"
+	if [[ ! -d "$dir" ]]; then
+		log_warn "htop-vim source not found at $dir, skipping."
+		return 0
+	fi
 
-    log_info "Compiling htop-vim -> $prefix_dest"
-    local jobs
-    jobs="$(nproc 2>/dev/null || echo 2)"
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] (cd $dir && ./autogen.sh && ./configure --prefix=$prefix_dest && make -j$jobs && make install)"
-    else
-        (
-            cd "$dir"
-            if [[ -f autogen.sh && ! -f configure ]]; then
-                ./autogen.sh
-            fi
-            if [[ -f configure && ! -f Makefile ]]; then
-                ./configure --prefix="$prefix_dest"
-            fi
-            make -j"$jobs"
-            make install
-        ) || log_warn "htop-vim compilation or install failed."
-    fi
+	log_info "Compiling htop-vim -> $prefix_dest"
+	local jobs
+	jobs="$(nproc 2>/dev/null || echo 2)"
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] (cd $dir && ./autogen.sh && ./configure --prefix=$prefix_dest && make -j$jobs && make install)"
+	else
+		(
+			cd "$dir"
+			if [[ -f autogen.sh && ! -f configure ]]; then
+				./autogen.sh
+			fi
+			if [[ -f configure && ! -f Makefile ]]; then
+				./configure --prefix="$prefix_dest"
+			fi
+			make -j"$jobs"
+			make install
+		) || log_warn "htop-vim compilation or install failed."
+	fi
 }
 
 step_compile_programs() {
-    if [[ "$COMPILE_PROGRAMS" != true ]]; then
-        log_step "Skipping program compilation (--no-compile specified)."
-        return 0
-    fi
+	if [[ "$COMPILE_PROGRAMS" != true ]]; then
+		log_step "Skipping program compilation (--no-compile specified)."
+		return 0
+	fi
 
-    log_step "Compiling personal programs..."
-    run_cmd mkdir -p "$HOME/.local/bin" || true
+	log_step "Compiling personal programs..."
+	run_cmd mkdir -p "$HOME/.local/bin" || true
 
-    compile_pwdshort
-    compile_rstow
-    compile_lf
-    compile_htop_vim
+	compile_pwdshort
+	compile_rstow
+	compile_lf
+	compile_htop_vim
 }
 
 # ==============================================================================
 # STEP 8: PYTHON PACKAGES
 # ==============================================================================
 step_python_packages() {
-    if [[ "$INSTALL_PYTHON" != true ]]; then
-        log_step "Skipping Python package installation (--no-python specified)."
-        return 0
-    fi
+	if [[ "$INSTALL_PYTHON" != true ]]; then
+		log_step "Skipping Python package installation (--no-python specified)."
+		return 0
+	fi
 
-    log_step "Installing Python packages via pip (${PYTHON_PIP_PACKAGES[*]})..."
-    local pip_cmd
-    if command -v pip3 >/dev/null 2>&1; then
-        pip_cmd="pip3"
-    elif command -v pip >/dev/null 2>&1; then
-        pip_cmd="pip"
-    elif command -v python3 >/dev/null 2>&1; then
-        pip_cmd="python3 -m pip"
-    else
-        log_warn "Neither pip nor python3 found; skipping Python package installation."
-        return 0
-    fi
+	log_step "Installing Python packages via pip (${PYTHON_PIP_PACKAGES[*]})..."
+	local pip_cmd
+	if command -v pip3 >/dev/null 2>&1; then
+		pip_cmd="pip3"
+	elif command -v pip >/dev/null 2>&1; then
+		pip_cmd="pip"
+	elif command -v python3 >/dev/null 2>&1; then
+		pip_cmd="python3 -m pip"
+	else
+		log_warn "Neither pip nor python3 found; skipping Python package installation."
+		return 0
+	fi
 
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] $pip_cmd install --break-system-packages --upgrade ${PYTHON_PIP_PACKAGES[*]}"
-        return 0
-    fi
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] $pip_cmd install --break-system-packages --upgrade ${PYTHON_PIP_PACKAGES[*]}"
+		return 0
+	fi
 
-    $pip_cmd install --break-system-packages --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null \
-        || $pip_cmd install --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null \
-        || log_warn "pip install encountered issues on some Python packages."
+	$pip_cmd install --break-system-packages --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null ||
+		$pip_cmd install --upgrade "${PYTHON_PIP_PACKAGES[@]}" 2>/dev/null ||
+		log_warn "pip install encountered issues on some Python packages."
 }
 
 # ==============================================================================
 # STEP 9: DOTFILES & TERMUX CONFIGURATION
 # ==============================================================================
 step_dotfiles() {
-    if [[ "$SETUP_DOTFILES" != true ]]; then
-        log_step "Skipping dotfiles and Termux configuration (--no-dotfiles specified)."
-        return 0
-    fi
+	if [[ "$SETUP_DOTFILES" != true ]]; then
+		log_step "Skipping dotfiles and Termux configuration (--no-dotfiles specified)."
+		return 0
+	fi
 
-    log_step "Configuring dotfiles via rstow and Termux environment..."
+	log_step "Configuring dotfiles via rstow and Termux environment..."
 
-    local config_dir="$HOME/config"
-    local script_update="$HOME/script/update"
+	local config_dir="$HOME/config"
+	local script_update="$HOME/script/update"
 
-    # 1. Run "update" from ~/script in ~/config (populates ~/.config via rstow)
-    if [[ -d "$config_dir" ]]; then
-        log_info "Running 'update' in $config_dir (populates ~/.config via rstow)..."
-        if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] (cd $config_dir && export PATH=\"\$HOME/.local/bin:\$HOME/script:\$PATH\" && [ -x $script_update ] && $script_update || bash ./.update.sh)"
-        else
-            (
-                export PATH="$HOME/.local/bin:$HOME/script:$PATH"
-                cd "$config_dir"
-                if [[ -x "$script_update" ]]; then
-                    run_cmd "$script_update"
-                elif [[ -x "./.update.sh" ]]; then
-                    run_cmd ./.update.sh
-                elif [[ -f "./.update.sh" ]]; then
-                    run_cmd bash ./.update.sh
-                else
-                    log_warn "Neither $script_update nor $config_dir/.update.sh found or executable."
-                fi
-            ) || log_warn "Dotfiles linking in $config_dir encountered an issue."
-        fi
-    else
-        log_warn "Config directory '$config_dir' does not exist, skipping dotfiles update."
-    fi
+	# 1. Run "update" from ~/script in ~/config (populates ~/.config via rstow)
+	if [[ -d "$config_dir" ]]; then
+		log_info "Running 'update' in $config_dir (populates ~/.config via rstow)..."
+		if [[ "$DRY_RUN" == true ]]; then
+			echo "[DRY-RUN] (cd $config_dir && export PATH=\"\$HOME/.local/bin:\$HOME/script:\$PATH\" && [ -x $script_update ] && $script_update || bash ./.update.sh)"
+		else
+			(
+				export PATH="$HOME/.local/bin:$HOME/script:$PATH"
+				cd "$config_dir"
+				if [[ -x "$script_update" ]]; then
+					run_cmd "$script_update"
+				elif [[ -x "./.update.sh" ]]; then
+					run_cmd ./.update.sh
+				elif [[ -f "./.update.sh" ]]; then
+					run_cmd bash ./.update.sh
+				else
+					log_warn "Neither $script_update nor $config_dir/.update.sh found or executable."
+				fi
+			) || log_warn "Dotfiles linking in $config_dir encountered an issue."
+		fi
+	else
+		log_warn "Config directory '$config_dir' does not exist, skipping dotfiles update."
+	fi
 
-    # 2. Symlink ~/config/termux to ~/.termux (switches default shell to zsh at next login)
-    local termux_src="$config_dir/termux"
-    local termux_dest="$HOME/.termux"
+	# 2. Symlink ~/config/termux to ~/.termux (switches default shell to zsh at next login)
+	local termux_src="$config_dir/termux"
+	local termux_dest="$HOME/.termux"
 
-    if [[ -d "$termux_src" ]]; then
-        log_info "Linking $termux_src -> $termux_dest (switches default login shell to zsh)..."
-        if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] ln -snf $termux_src $termux_dest"
-        else
-            if [[ -d "$termux_dest" && ! -L "$termux_dest" ]]; then
-                rmdir "$termux_dest" 2>/dev/null || mv "$termux_dest" "$termux_dest.bak.$$" 2>/dev/null || true
-            fi
-            ln -snf "$termux_src" "$termux_dest" || log_warn "Failed to create symlink $termux_dest -> $termux_src"
-            log_info "Symlink created: $termux_dest -> $termux_src"
-        fi
-    else
-        log_warn "Termux configuration directory '$termux_src' not found, skipping ~/.termux link."
-    fi
+	if [[ -d "$termux_src" ]]; then
+		log_info "Linking $termux_src -> $termux_dest (switches default login shell to zsh)..."
+		if [[ "$DRY_RUN" == true ]]; then
+			echo "[DRY-RUN] ln -snf $termux_src $termux_dest"
+		else
+			if [[ -d "$termux_dest" && ! -L "$termux_dest" ]]; then
+				rmdir "$termux_dest" 2>/dev/null || mv "$termux_dest" "$termux_dest.bak.$$" 2>/dev/null || true
+			fi
+			ln -snf "$termux_src" "$termux_dest" || log_warn "Failed to create symlink $termux_dest -> $termux_src"
+			log_info "Symlink created: $termux_dest -> $termux_src"
+		fi
+	else
+		log_warn "Termux configuration directory '$termux_src' not found, skipping ~/.termux link."
+	fi
 
-    # 3. Symlink .termux/zshenv to /data/data/com.termux/files/usr/etc/zshenv (sets ZDOTDIR for zsh)
-    local zshenv_src="$HOME/.termux/zshenv"
-    local zshenv_dest="${PREFIX:-/data/data/com.termux/files/usr}/etc/zshenv"
+	# 3. Symlink .termux/zshenv to /data/data/com.termux/files/usr/etc/zshenv (sets ZDOTDIR for zsh)
+	local zshenv_src="$HOME/.termux/zshenv"
+	local zshenv_dest="${PREFIX:-/data/data/com.termux/files/usr}/etc/zshenv"
 
-    log_info "Linking $zshenv_src -> $zshenv_dest (initializes ZDOTDIR for zsh)..."
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] ln -snf $zshenv_src $zshenv_dest"
-    else
-        mkdir -p "$(dirname "$zshenv_dest")" 2>/dev/null || true
-        ln -snf "$zshenv_src" "$zshenv_dest" || log_warn "Failed to create symlink $zshenv_dest -> $zshenv_src"
-        log_info "Symlink created: $zshenv_dest -> $zshenv_src"
-    fi
+	log_info "Linking $zshenv_src -> $zshenv_dest (initializes ZDOTDIR for zsh)..."
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] ln -snf $zshenv_src $zshenv_dest"
+	else
+		mkdir -p "$(dirname "$zshenv_dest")" 2>/dev/null || true
+		ln -snf "$zshenv_src" "$zshenv_dest" || log_warn "Failed to create symlink $zshenv_dest -> $zshenv_src"
+		log_info "Symlink created: $zshenv_dest -> $zshenv_src"
+	fi
 
-    # 4. Disable login MOTD banner by renaming /etc/motd to /etc/motd.old
-    local motd_file="${PREFIX:-/data/data/com.termux/files/usr}/etc/motd"
-    if [[ ! -e "$motd_file" && -e "/etc/motd" ]]; then
-        motd_file="/etc/motd"
-    fi
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] [ -e $motd_file ] && mv -f $motd_file ${motd_file}.old"
-    elif [[ -e "$motd_file" || -L "$motd_file" ]]; then
-        log_info "Moving $motd_file -> ${motd_file}.old..."
-        mv -f "$motd_file" "${motd_file}.old" 2>/dev/null || log_warn "Could not move $motd_file to ${motd_file}.old."
-    fi
+	# 4. Disable login MOTD banner by renaming /etc/motd to /etc/motd.old
+	local motd_file="${PREFIX:-/data/data/com.termux/files/usr}/etc/motd"
+	if [[ ! -e "$motd_file" && -e "/etc/motd" ]]; then
+		motd_file="/etc/motd"
+	fi
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] [ -e $motd_file ] && mv -f $motd_file ${motd_file}.old"
+	elif [[ -e "$motd_file" || -L "$motd_file" ]]; then
+		log_info "Moving $motd_file -> ${motd_file}.old..."
+		mv -f "$motd_file" "${motd_file}.old" 2>/dev/null || log_warn "Could not move $motd_file to ${motd_file}.old."
+	fi
 }
 
 # ==============================================================================
 # STEP 10: ANTIGRAVITY CLI & HOSTS CONFIGURATION
 # ==============================================================================
 configure_hosts() {
-    log_info "Configuring localhost mappings in /etc/hosts for Antigravity authentication..."
-    local required_entries=(
-        "127.0.0.1 localhost"
-        "::1 ip6-localhost"
-    )
+	log_info "Configuring localhost mappings in /etc/hosts for Antigravity authentication..."
+	local required_entries=(
+		"127.0.0.1 localhost"
+		"::1 ip6-localhost"
+	)
 
-    local target_files=()
+	local target_files=()
 
-    # 1. System /etc/hosts
-    if [[ -w "/etc/hosts" ]]; then
-        target_files+=("/etc/hosts")
-    elif [[ -e "/etc/hosts" ]]; then
-        # Try updating via tsu / su if available on rooted Android
-        local root_cmd=""
-        if command -v tsu >/dev/null 2>&1; then
-            root_cmd="tsu -c"
-        elif command -v su >/dev/null 2>&1; then
-            root_cmd="su -c"
-        fi
+	# 1. System /etc/hosts
+	if [[ -w "/etc/hosts" ]]; then
+		target_files+=("/etc/hosts")
+	elif [[ -e "/etc/hosts" ]]; then
+		# Try updating via tsu / su if available on rooted Android
+		local root_cmd=""
+		if command -v tsu >/dev/null 2>&1; then
+			root_cmd="tsu -c"
+		elif command -v su >/dev/null 2>&1; then
+			root_cmd="su -c"
+		fi
 
-        if [[ -n "$root_cmd" ]]; then
-            for entry in "${required_entries[@]}"; do
-                if ! grep -qF "$entry" "/etc/hosts" 2>/dev/null; then
-                    if [[ "$DRY_RUN" == true ]]; then
-                        echo "[DRY-RUN] $root_cmd \"echo '$entry' >> /etc/hosts\""
-                    else
-                        $root_cmd "echo '$entry' >> /etc/hosts" 2>/dev/null || true
-                    fi
-                fi
-            done
-        else
-            log_warn "/etc/hosts is read-only. Ensure these entries exist for Antigravity auth:"
-            log_warn "  127.0.0.1 localhost"
-            log_warn "  ::1 ip6-localhost"
-        fi
-    fi
+		if [[ -n "$root_cmd" ]]; then
+			for entry in "${required_entries[@]}"; do
+				if ! grep -qF "$entry" "/etc/hosts" 2>/dev/null; then
+					if [[ "$DRY_RUN" == true ]]; then
+						echo "[DRY-RUN] $root_cmd \"echo '$entry' >> /etc/hosts\""
+					else
+						$root_cmd "echo '$entry' >> /etc/hosts" 2>/dev/null || true
+					fi
+				fi
+			done
+		else
+			log_warn "/etc/hosts is read-only. Ensure these entries exist for Antigravity auth:"
+			log_warn "  127.0.0.1 localhost"
+			log_warn "  ::1 ip6-localhost"
+		fi
+	fi
 
-    # 2. Termux and glibc /etc/hosts paths (always writable in Termux)
-    local prefix_hosts="${PREFIX:-/data/data/com.termux/files/usr}/etc/hosts"
-    local glibc_hosts="${PREFIX:-/data/data/com.termux/files/usr}/glibc/etc/hosts"
+	# 2. Termux and glibc /etc/hosts paths (always writable in Termux)
+	local prefix_hosts="${PREFIX:-/data/data/com.termux/files/usr}/etc/hosts"
+	local glibc_hosts="${PREFIX:-/data/data/com.termux/files/usr}/glibc/etc/hosts"
 
-    for host_file in "$prefix_hosts" "$glibc_hosts"; do
-        if [[ -d "$(dirname "$host_file")" ]]; then
-            target_files+=("$host_file")
-        fi
-    done
+	for host_file in "$prefix_hosts" "$glibc_hosts"; do
+		if [[ -d "$(dirname "$host_file")" ]]; then
+			target_files+=("$host_file")
+		fi
+	done
 
-    for target in "${target_files[@]}"; do
-        if [[ "$DRY_RUN" == true ]]; then
-            echo "[DRY-RUN] Ensure localhost entries in $target"
-        else
-            touch "$target" 2>/dev/null || continue
-            for entry in "${required_entries[@]}"; do
-                if ! grep -qF "$entry" "$target" 2>/dev/null; then
-                    echo "$entry" >> "$target" 2>/dev/null || true
-                    log_info "Added '$entry' to $target"
-                fi
-            done
-        fi
-    done
+	for target in "${target_files[@]}"; do
+		if [[ "$DRY_RUN" == true ]]; then
+			echo "[DRY-RUN] Ensure localhost entries in $target"
+		else
+			touch "$target" 2>/dev/null || continue
+			for entry in "${required_entries[@]}"; do
+				if ! grep -qF "$entry" "$target" 2>/dev/null; then
+					echo "$entry" >>"$target" 2>/dev/null || true
+					log_info "Added '$entry' to $target"
+				fi
+			done
+		fi
+	done
 }
 
 step_antigravity() {
-    if [[ "$INSTALL_ANTIGRAVITY" != true ]]; then
-        log_step "Skipping Antigravity CLI installation (--no-antigravity specified)."
-        return 0
-    fi
+	if [[ "$INSTALL_ANTIGRAVITY" != true ]]; then
+		log_step "Skipping Antigravity CLI installation (--no-antigravity specified)."
+		return 0
+	fi
 
-    log_step "Setting up Antigravity CLI (wallentx/antigravity-cli-termux)..."
+	log_step "Setting up Antigravity CLI (wallentx/antigravity-cli-termux)..."
 
-    # Configure hosts entries required for OAuth authentication
-    configure_hosts
+	# Configure hosts entries required for OAuth authentication
+	configure_hosts
 
-    # Check if agy is already installed
-    if command -v agy >/dev/null 2>&1; then
-        log_info "Antigravity CLI ('agy') is already installed ($(agy --version 2>/dev/null || echo 'installed'))."
-        return 0
-    fi
+	# Check if agy is already installed
+	if command -v agy >/dev/null 2>&1; then
+		log_info "Antigravity CLI ('agy') is already installed ($(agy --version 2>/dev/null || echo 'installed'))."
+		return 0
+	fi
 
-    local install_url="https://raw.githubusercontent.com/wallentx/antigravity-cli-termux/dev/install.sh"
-    log_info "Installing Antigravity CLI via $install_url..."
+	local install_url="https://raw.githubusercontent.com/wallentx/antigravity-cli-termux/dev/install.sh"
+	log_info "Installing Antigravity CLI via $install_url..."
 
-    if [[ "$DRY_RUN" == true ]]; then
-        echo "[DRY-RUN] AGY_INSTALL_SKIP_LAUNCH=1 curl -fsSL $install_url | bash"
-    else
-        if command -v curl >/dev/null 2>&1; then
-            AGY_INSTALL_SKIP_LAUNCH=1 curl -fsSL "$install_url" | bash || log_warn "Antigravity CLI installation failed or reported a warning."
-        else
-            log_warn "'curl' command not found, skipping Antigravity CLI installation."
-        fi
-    fi
+	if [[ "$DRY_RUN" == true ]]; then
+		echo "[DRY-RUN] AGY_INSTALL_SKIP_LAUNCH=1 curl -fsSL $install_url | bash"
+	else
+		if command -v curl >/dev/null 2>&1; then
+			AGY_INSTALL_SKIP_LAUNCH=1 curl -fsSL "$install_url" | bash || log_warn "Antigravity CLI installation failed or reported a warning."
+		else
+			log_warn "'curl' command not found, skipping Antigravity CLI installation."
+		fi
+	fi
 }
 
 # ==============================================================================
 # STEP 11: BACKGROUND SERVICES
 # ==============================================================================
 step_services() {
-    if [[ "$ENABLE_SERVICES" != true ]]; then
-        log_step "Skipping service configuration (--no-services specified)."
-        return 0
-    fi
+	if [[ "$ENABLE_SERVICES" != true ]]; then
+		log_step "Skipping service configuration (--no-services specified)."
+		return 0
+	fi
 
-    log_step "Configuring background services..."
-    if command -v sv-enable >/dev/null 2>&1; then
-        run_cmd sv-enable sshd || log_warn "'sv-enable sshd' returned non-zero (termux-services daemon may not be active yet; restart Termux and run 'sv-enable sshd')."
-    else
-        log_warn "'sv-enable' command not found (install 'termux-services' to enable sshd daemon)."
-    fi
+	log_step "Configuring background services..."
+	if command -v sv-enable >/dev/null 2>&1; then
+		run_cmd sv-enable sshd || log_warn "'sv-enable sshd' returned non-zero (termux-services daemon may not be active yet; restart Termux and run 'sv-enable sshd')."
+	else
+		log_warn "'sv-enable' command not found (install 'termux-services' to enable sshd daemon)."
+	fi
 }
 
 # ==============================================================================
 # MAIN EXECUTION
 # ==============================================================================
 main() {
-    parse_args "$@"
+	parse_args "$@"
 
-    step_storage
-    step_change_repo
-    step_packages
-    step_directories
-    step_ssh_check
-    step_clone_repos
-    step_compile_programs
-    step_python_packages
-    step_dotfiles
-    step_antigravity
-    step_services
+	step_storage
+	step_change_repo
+	step_packages
+	step_directories
+	step_ssh_check
+	step_clone_repos
+	step_compile_programs
+	step_python_packages
+	step_dotfiles
+	step_antigravity
+	step_services
 
-    log_step "Bootstrap completed successfully."
+	log_step "Bootstrap completed successfully."
 }
 
 main "$@"
